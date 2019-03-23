@@ -1,0 +1,232 @@
+/*html, body { height: 100% }
+
+.header{
+    grid-area:header;
+}*/
+/* ------------------------------------ 整个框架的grid 开始 ------------------------------------*/
+#update-all{
+    grid-area:all;
+}
+#update-new{
+    grid-area:new;
+}
+#calendar{
+    grid-area:cal;
+}
+.func-module{
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: auto;
+    grid-template-areas:
+        "all new cal";
+        
+    grid-area:func;
+}
+.search-module{
+    grid-area:search;
+}
+.attachment-module{
+    grid-area:attachment;
+}
+.info-module{
+    grid-area:info;
+}
+.list-module{
+    grid-area:list;
+    /* height: 500px; */
+    overflow: auto;
+}
+.WYSIWYG-module{
+    grid-area:note;
+}
+.calendar-module{
+    grid-area:calendar;
+}
+/*.header, .search-module, .info-module, .attachment-module, .list-module, .WYSIWYG-module, .calendar-module{
+    border: 1px solid red; 
+}*/ 
+.grid-container{
+    width: 98vw;
+    height: 96vh;
+    display:grid;
+    grid-template-columns: 318px auto;
+    grid-template-rows: 32px 32px 96px auto;
+    grid-template-areas:
+        /* "header header header"*/
+        "func info"
+        "search info"
+        "search note"
+        "list note";
+    grid-gap: 2px 3px; /* row column*/
+    /*justify-items: stretch; 
+    justify-content: stretch;
+    grid-auto-flow: row;*/
+}
+/* ------------------------------------ 整个框架的grid 结束 ------------------------------------*/
+
+/* ------------------------------------- 搜索框的grid 开始 -------------------------------------*/
+#search-input{
+    grid-area:search-input;
+    resize: none;
+}
+#search-reset-btn{
+    grid-area:reset-btn;
+}
+.search-radio-btn{
+    grid-area:rbtns;
+    display: flex;
+    flex-direction: column;
+}
+.radio-btn{
+    flex-grow:1;
+    /*display:block;*/
+}
+#search-btn{
+    grid-area:search-btn;
+    background-color:#faee06;
+}
+.search-module{
+    display:grid;
+    grid-template-columns: auto 48px;
+    grid-template-rows: repeat(5, auto);
+    grid-template-areas:
+        "search-input reset-btn"
+        /*"search-input and-rbtn"
+        "search-input or-rbtn"
+        "search-input not-rbtn"*/
+        "search-input rbtns"
+        "search-input search-btn";
+}
+/* ------------------------------------- 搜索框的grid 结束 -------------------------------------*/
+
+/* ------------------------------------- 列表框的布局 开始 -------------------------------------*/
+.list-buttons-container{
+    display:flex;
+}
+#Draft-sel-btn, #Archive-sel-btn, #sort-btn{
+    flex-grow:1;
+}
+#sort-btn{
+    width:36px;
+}
+.note-item{
+    /*max-width: 100%;
+    letter-spacing: 0.544px;
+    box-sizing: border-box !important;
+    overflow-wrap: break-word !important;*/
+    white-space: nowrap; /* 使得内容仅单行显示 */
+    overflow: hidden;
+    text-overflow: ellipsis;/* 使得被截断部分显示为。。。 */
+}
+/* ------------------------------------- 列表框的布局 结束 -------------------------------------*/
+
+/* ------------------------------------- 标题框的grid 开始 -------------------------------------*/
+#save-btn{
+    grid-area:save-btn; 
+    background-color: lightgray;
+    border: 1px solid gray;
+    border-radius:2px;
+    text-align: center;
+    text-decoration:none;
+}
+.note-title-label{
+    grid-area:title-label;  
+}
+.note-title-input{
+    grid-area:title-edit; 
+}
+.note-keywords-label{
+    grid-area:keywords-label;
+}
+.note-keywords-input{
+    grid-area:keywords-edit;
+}
+.note-time-label{
+    grid-area:time-label;
+}
+.info-module{
+    display:grid;
+    grid-template-columns: 72px 72px auto;
+    grid-template-rows: repeat(3, 1fr);
+    grid-template-areas:
+        "save-btn title-label title-edit"
+        "save-btn keywords-label keywords-edit"
+        "save-btn time-label time-label"
+}
+/* ------------------------------------- 标题框的grid 结束 -------------------------------------*/
+
+/* ------------------------------------- WYSIWYG的布局 开始 ------------------------------------*/
+.WYSIWYG-buttons-container{
+    display:flex;
+    grid-area:buttons;
+}
+#WYSIWYG-note{
+    grid-area:frame;
+    width: 100%; 
+    height: 100%;
+}
+.WYSIWYG-module{
+    /*position: absolute;
+    display: block;  width: 100%; 
+    height: 100%;
+    display: flex; width: 100%; height: 100%; flex-direction: column; background-color: blue; overflow: hidden;*/
+    display:grid;
+    grid-template-columns: auto;
+    grid-template-rows: 24px auto;
+    grid-template-areas:
+        "buttons"
+        "frame";
+    overflow: hidden;
+} 
+
+.WYSIWYG-button, #arch-btn, #dele-btn{
+    /*height: 24px; */
+    background-color: lightgray;
+    border: 1px solid gray;
+    border-radius:2px;
+    flex-grow:1;
+    display:block;
+    text-align: center;
+    text-decoration:none;
+}
+#arch-btn{
+    background-color:#399cd9;
+}
+#dele-btn{
+    background-color:#db331d;
+}
+#bold-btn{
+    font-weight:bold;
+}
+#fred-btn{
+    color:red;
+}
+#bblue-btn{
+    color:white;
+    background-color:#00d4ff;
+}
+#byllw-btn{
+    background-color:#faff00;
+}
+#rmfmt-btn{
+    font-style:italic;
+}
+/* ------------------------------------- WYSIWYG的布局 结束 ------------------------------------*/
+/*#WYSIWYG-note, .frame-container{
+    display: block;width: 100%; height: 100%; 
+    flex-grow: 1;
+    position:fixed;
+    display: block;
+    position: fixed
+    width: 100%; 
+    height: 100%;
+    ;
+    width: 100%;
+    height:100%;
+    height:400px;
+    
+    flex-grow: 1; border: none; margin: 0; padding: 0; */
+}
+/*.frame-container{
+    width: 100%; 
+    height: 100%; 
+} */   

@@ -6,6 +6,23 @@ __pycache__/
 # C extensions
 *.so
 
+# config_sercet
+secret.py
+
+# not useful anymore
+note_db.sqlite3
+mystyles.css
+*archive*
+Untitled.ipynb
+list.html
+wysiwyg.html
+
+# notepad++ backup
+*.bak
+
+# shortcut-run
+*.bat
+
 # Distribution / packaging
 .Python
 build/

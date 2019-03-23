@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="zh_CN">
+<meta charset="utf-8">
+  <head>
+    <title>{{title}} - 网页笔记本</title>
+    <link rel="shortcut icon" type="image/x-icon" href={{ url_for("static", filename="favicon.ico") }}>
+    <link rel="stylesheet" type="text/css" href={{ url_for("static", filename="mystyles.css") }}>
+    {% block wysiwyg_script %}{% endblock %}
+  </head>
+  <body>
+      <h1>Hello, {{user.nickname}}!</h1>
+      <div>
+        search module
+      </div>
+
+      <div class="note-list">
+        {% block note_list %}{% endblock %}
+      </div>
+      <div>
+        info module
+        <div>
+          keywords module
+        </div>
+      </div>
+      <div class="WYSIWYG">
+          {% block wysiwyg_buttons %}{% endblock %}
+          {% block wysiwyg_frame %}{% endblock %}
+      </div>
+      
+      <div>
+        attachment module
+      </div>
+      
+      <div>
+        calendar module
+      </div>
+  </body>
+</html>
