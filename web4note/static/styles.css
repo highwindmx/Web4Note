@@ -1,8 +1,5 @@
 /*html, body { height: 100% }
 
-.header{
-    grid-area:header;
-}*/
 /* ------------------------------------ 整个框架的grid 开始 ------------------------------------*/
 #update-all{
     grid-area:all;
@@ -32,7 +29,6 @@
 }
 .list-module{
     grid-area:list;
-    /* height: 500px; */
     overflow: auto;
 }
 .WYSIWYG-module{
@@ -41,9 +37,6 @@
 .calendar-module{
     grid-area:calendar;
 }
-/*.header, .search-module, .info-module, .attachment-module, .list-module, .WYSIWYG-module, .calendar-module{
-    border: 1px solid red; 
-}*/ 
 .grid-container{
     width: 98vw;
     height: 96vh;
@@ -51,15 +44,11 @@
     grid-template-columns: 318px auto;
     grid-template-rows: 32px 32px 96px auto;
     grid-template-areas:
-        /* "header header header"*/
         "func info"
         "search info"
         "search note"
         "list note";
     grid-gap: 2px 3px; /* row column*/
-    /*justify-items: stretch; 
-    justify-content: stretch;
-    grid-auto-flow: row;*/
 }
 /* ------------------------------------ 整个框架的grid 结束 ------------------------------------*/
 
@@ -78,7 +67,6 @@
 }
 .radio-btn{
     flex-grow:1;
-    /*display:block;*/
 }
 #search-btn{
     grid-area:search-btn;
@@ -90,9 +78,6 @@
     grid-template-rows: repeat(5, auto);
     grid-template-areas:
         "search-input reset-btn"
-        /*"search-input and-rbtn"
-        "search-input or-rbtn"
-        "search-input not-rbtn"*/
         "search-input rbtns"
         "search-input search-btn";
 }
@@ -109,10 +94,6 @@
     width:36px;
 }
 .note-item{
-    /*max-width: 100%;
-    letter-spacing: 0.544px;
-    box-sizing: border-box !important;
-    overflow-wrap: break-word !important;*/
     white-space: nowrap; /* 使得内容仅单行显示 */
     overflow: hidden;
     text-overflow: ellipsis;/* 使得被截断部分显示为。。。 */
@@ -165,10 +146,6 @@
     height: 100%;
 }
 .WYSIWYG-module{
-    /*position: absolute;
-    display: block;  width: 100%; 
-    height: 100%;
-    display: flex; width: 100%; height: 100%; flex-direction: column; background-color: blue; overflow: hidden;*/
     display:grid;
     grid-template-columns: auto;
     grid-template-rows: 24px auto;
@@ -179,7 +156,6 @@
 } 
 
 .WYSIWYG-button, #arch-btn, #dele-btn{
-    /*height: 24px; */
     background-color: lightgray;
     border: 1px solid gray;
     border-radius:2px;
@@ -211,22 +187,4 @@
     font-style:italic;
 }
 /* ------------------------------------- WYSIWYG的布局 结束 ------------------------------------*/
-/*#WYSIWYG-note, .frame-container{
-    display: block;width: 100%; height: 100%; 
-    flex-grow: 1;
-    position:fixed;
-    display: block;
-    position: fixed
-    width: 100%; 
-    height: 100%;
-    ;
-    width: 100%;
-    height:100%;
-    height:400px;
-    
-    flex-grow: 1; border: none; margin: 0; padding: 0; */
-}
-/*.frame-container{
-    width: 100%; 
-    height: 100%; 
-} */   
+  

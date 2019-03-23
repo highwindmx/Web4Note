@@ -79,9 +79,6 @@
     </head>
     <body>
         <div class="grid-container">
-            <!--div class="header">
-                <h1>Hello, {{user.nickname}}!</h1>
-            </div--> 
             <div class="func-module">
                 <button id="update-all" onclick="updateAll()"   >更新全部</button>
                 <button id="update-new" onclick="updateNew()"   >更新最新</button>
@@ -98,9 +95,6 @@
                     <div class="radio-btn"><input type="radio" name="search-radio" value="or" >或</div>   
                     <div class="radio-btn"><input type="radio" name="search-radio" value="not">否</div>   
                 </form>
-                <!--input type="radio" name="search-radio" id="and-rbtn"  value="and" checked>和</input>
-                <input type="radio" name="search-radio" id="or-rbtn"   value="or" >或</input>
-                <input type="radio" name="search-radio" id="note-rbtn" value="not">否</input-->
                 <button id="search-btn">检索</button>
             </div>
             
@@ -122,14 +116,6 @@
                             <option value="6">按分类</option>
                             <option value="8">按文件类型</option>
                         </optgroup>
-                            <!--option value="1">按标题(A-Z)</option>
-                            <option value="2">按标题(Z-A)</option>
-                            <option value="3">按时间(0-9)</option>
-                            <option value="4">按时间(9-0)</option>
-                            <option value="5">按分类(A-Z)</option>
-                            <option value="6">按分类(Z-A)</option>
-                            <option value="7">按文件类型(A-Z)</option>
-                            <option value="8">按文件类型(Z-A)</option-->
                     </select>
                 </div>
                 <div class="list-container">                
@@ -169,15 +155,7 @@
                 <!--iframe class="WYSIWYG-note" name="wysiwyg" src={{ url_for("static", filename=source) }}></iframe-->
                     <iframe id="WYSIWYG-note" name="wysiwyg" src={{ source }}></iframe>
                 </div>
-            </div>
-
-            <!--div class="attachment-module">
-                attachment module
-            </div>
-            <div class="calendar-module">
-                calendar module
-            </div-->
-            
+            </div>           
         </div>    
     </body>
 </html>
