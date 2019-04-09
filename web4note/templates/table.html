@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="zh_CN">
+<meta charset="utf-8">
+    <head>
+        {% block title %}{% endblock %}
+        <link rel="shortcut icon" type="image/x-icon" href={{ url_for("static", filename="favicon.ico") }}>
+        <!--link rel="stylesheet" type="text/css" href={{ url_for("static", filename="styles.css") }}-->
+        <link rel='stylesheet' type="text/css" href={{ url_for('static', filename="font-awesome-4.7.0/css/font-awesome.css") }}>
+        <link rel="stylesheet" type="text/css" href={{ url_for('static', filename='bootstrap-4.3.1-dist/css/bootstrap.min.css') }}>
+        <link rel='stylesheet' type="text/css" href={{ url_for('static', filename="dataTables-1.10.18/dataTables.bootstrap4.min.css") }}>
+        <link rel='stylesheet' type="text/css" href={{ url_for('static', filename="dataTables-1.10.18/jquery.dataTables.min.css") }}>
+        
+        <script type="text/javascript" src={{ url_for('static', filename="jquery-3.3.1/jquery-3.3.1.min.js") }}></script>
+        <script type="text/javascript" src={{ url_for('static', filename="bootstrap-4.3.1-dist/js/bootstrap.min.js") }}></script>
+        <script type="text/javascript" src={{ url_for('static', filename="dataTables-1.10.18/dataTables.bootstrap4.min.js") }}></script>
+        <script type="text/javascript" src={{ url_for('static', filename="dataTables-1.10.18/jquery.dataTables.min.js") }}></script>
+        <script type="text/javascript" src={{ url_for('static', filename='tablescript.js') }}></script>        
+    </head>
+    <body>
+        <div class="pos-f-t">
+            <nav class="navbar navbar-dark bg-dark">
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggleExternalContent" aria-controls="navbarToggleExternalContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                {% block navinfo %}{% endblock %}
+            </nav>
+            <div class="collapse" id="navbarToggleExternalContent">
+                <div class="bg-dark p-4">
+                    <h4 class="text-white">笔记操作</h4>
+                    <span class="text-muted">现在可以对笔记库进行这些操作：</span>
+                    <button class="btn btn-secondary" id="update-all"><i class="fa fa-hourglass"></i>重置</button>
+                    <button class="btn btn-secondary" id="update-new"><i class="fa fa-hourglass-end"></i>追加</button>
+                    <button class="btn btn-secondary" id="calendar"   onclick="showCalender()"><i class="fa fa-calendar-check-o"></i>日历</button>
+                    <button class="btn btn-secondary" id="wordcloud"  onclick="showCloud()"><i class="fa fa-cloud"></i>词云</button>
+                </div>
+            </div>
+        </div>
+        <nav>
+            <div class="nav nav-tabs " id="nav-tab" role="tablist">
+                <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-home" aria-selected="true">笔记列表</a>
+                <a class="nav-item nav-link" id="nav-profile-tab" data-toggle="tab" href="#nav-profile" role="tab" aria-controls="nav-profile" aria-selected="false">复杂检索</a>
+                <a class="nav-item nav-link" id="nav-contact-tab" data-toggle="tab" href="#nav-contact" role="tab" aria-controls="nav-contact" aria-selected="false">关于</a>
+            </div>
+        </nav>
+        <div class="tab-content" id="nav-tabContent">
+            <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+                <div class="table">
+                    <table id="note_list_table"></table> <!--Here should be a table <div class="header"><h3 class="text-muted">我的笔记列表</h3></div>-->
+                </div>
+            </div>
+            <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
+                <div class="search-module">
+                    <button id="search-reset-btn"><i class="fa fa-circle-o"></i>重置</button>             
+                    <textarea id="search-input" name="Text1" ></textarea>
+                    <div class="search-radio-btn">
+                        <div class="radio-btn"><input type="radio" name="search-radio" value="and" checked>和</div>
+                        <div class="radio-btn"><input type="radio" name="search-radio" value="or" >或</div>   
+                        <div class="radio-btn"><input type="radio" name="search-radio" value="not">否</div>
+                    </div>                    
+                    <button type="button" id="search-btn">
+                        <i class="fa fa-search"></i>检索
+                    </button> 
+                </div> 
+            
+            </div>
+            <div class="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab">哥们儿你太帅了！</div>
+        </div>
+    </body>
+</html>

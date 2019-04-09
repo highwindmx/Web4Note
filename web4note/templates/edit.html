@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="zh_CN">
+<meta charset="utf-8">
+    <head>
+        <title>{{title}} - 网页笔记本</title>
+        <link rel="shortcut icon" type="image/x-icon" href={{ url_for("static", filename="favicon.ico") }}>
+        <link rel="stylesheet" type="text/css" href={{ url_for('static', filename='bootstrap-4.3.1-dist/css/bootstrap.min.css') }}>
+        <link rel='stylesheet' type="text/css" href={{ url_for('static', filename="font-awesome-4.7.0/css/font-awesome.css") }}>
+        <link rel="stylesheet" type="text/css" href={{ url_for("static", filename="styles.css") }}>
+        
+        <script type="text/javascript" src={{ url_for('static', filename="jquery-3.3.1/jquery-3.3.1.min.js") }}></script>
+        <script type="text/javascript" src={{ url_for('static', filename="bootstrap-4.3.1-dist/js/bootstrap.min.js") }}></script>
+        <script type="text/javascript" src={{ url_for('static', filename='editscript.js') }}></script>
+    </head>
+    <body>
+        <div class="main-container">
+            <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+                <a class="navbar-brand" href="#">我的笔记<span class="badge badge-light">{{ noteinfo['id'] }}</span></a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav">
+                        <li class="nav-item active">
+                            <a class="nav-link" href="{{ url_for('save') }}"><i class="fa fa-save"></i>保存<span class="sr-only">(current)</span></a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('archive') }}"><i class="fa fa-trash "></i>存档</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('delete') }}"><i class="fa fa-trash "></i>删除</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">修改时间：{{ noteinfo['ctime'] }}</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-nowrap" href="{{ noteinfo['url'] }}">外链：{{ noteinfo['url'] }}</a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+            <div class="info-module">
+                <div class="input-group mb-0">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="basic-addon3">标题：</span>
+                    </div>
+                    <input type="text" class="form-control" id="note-title" aria-describedby="basic-addon3" value="{{ noteinfo['title'] }}">
+                </div>
+                <div class="input-group mb-0">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="basic-addon3">分类：</span>
+                    </div>
+                    <input type="text" class="form-control" id="note-keywords" aria-describedby="basic-addon3" value="{{ noteinfo['keywords'] }}">
+                </div>
+            </div>
+            <div class="WYSIWYG-buttons-container">
+                
+                <button class="WYSIWYG-button btn btn-light" id="view-btn"><i class="fa fa-eye"></i>阅览</button>                                 
+                <button class="WYSIWYG-button btn btn-light" id="edit-btn"><i class="fa fa-pencil"></i>编辑</button>           
+                <button class="WYSIWYG-button btn btn-light" id="bold-btn" data-name="bold">加粗</button>
+                <button class="WYSIWYG-button btn btn-light" id="fred-btn" data-name="forecolor" data-value="red">变红</button>
+                <button class="WYSIWYG-button btn btn-light" id="bblue-btn" data-name="backcolor" data-value="#00d4ff">高亮蓝</button>
+                <button class="WYSIWYG-button btn btn-light" id="byllw-btn" data-name="backcolor" data-value="#faff00">高亮黄</button>
+                <button class="WYSIWYG-button btn btn-light" id="rmfmt-btn" data-name="removeFormat"><i class="fa fa-times"></i>清除格式</button>
+                <button class="WYSIWYG-button btn btn-light" id="numli-btn" data-name="insertorderedlist">1.数列</button>
+                <button class="WYSIWYG-button btn btn-light" id="dotli-btn" data-name="insertunorderedlist">● 点列</button>
+            </div><!--上边是WYSIWYG的各种按钮-->
+                <!--附件将以拖拽形式呈现-->
+            <!--iframe class="WYSIWYG-note" name="wysiwyg" src={{ url_for("static", filename=source) }}></iframe-->
+            <!--div class="WYSIWYG-note">不要随便加div不然脚本在DOM里会找不到这个组件的</div--> 
+            <iframe class="WYSIWYG-note" name="wysiwyg" src={{ source }}></iframe> 
+                       
+        </div> 
+    </body>
+</html>
