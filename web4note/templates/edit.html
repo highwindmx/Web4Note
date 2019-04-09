@@ -14,26 +14,28 @@
     </head>
     <body>
         <div class="main-container">
-            <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-                <a class="navbar-brand" href="#">我的笔记<span class="badge badge-light">{{ noteinfo['id'] }}</span></a>
+            <nav class="navbar navbar-expand-lg fixed-top navbar-dark bg-dark">
+                <a class="navbar-brand" href="#">
+                    我的笔记<span class="badge badge-light m-1">{{ noteinfo['id'] }}</span>
+                </a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="collapse navbar-collapse" id="navbarNav">
+                <div class="collapse navbar-collapse offcanvas-collapse" id="navbarNav">
                     <ul class="navbar-nav">
-                        <li class="nav-item active">
-                            <a class="nav-link" href="{{ url_for('save') }}"><i class="fa fa-save"></i>保存<span class="sr-only">(current)</span></a>
+                        <li class="nav-item m-1 active">
+                            <button class="btn btn-secondary text-nowrap" id="save-btn"><i class="fa fa-save"></i>保存<span class="sr-only">(current)</span></button>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ url_for('archive') }}"><i class="fa fa-trash "></i>存档</a>
+                        <li class="nav-item m-1">
+                            <button class="btn btn-secondary text-nowrap" id="arch-btn"><i class="fa fa-file-archive-o"></i>存档</button>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ url_for('delete') }}"><i class="fa fa-trash "></i>删除</a>
+                        <li class="nav-item m-1">
+                            <button class="btn btn-secondary text-nowrap" id="dele-btn"><i class="fa fa-trash"></i>删除</button>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">修改时间：{{ noteinfo['ctime'] }}</a>
+                        <li class="nav-item m-1">
+                            <a class="nav-link text-nowrap" href="#">修改时间：{{ noteinfo['ctime'] }}</a>
                         </li>
-                        <li class="nav-item">
+                        <li class="nav-item m-1">
                             <a class="nav-link text-nowrap" href="{{ noteinfo['url'] }}">外链：{{ noteinfo['url'] }}</a>
                         </li>
                     </ul>

@@ -149,6 +149,8 @@ class Note():
         # print(self.data)
         
     def writeInfo(self):
+        self.createInfo()
+        self.info_path = os.path.join(self.path, "{}.info".format(os.path.splitext(self.content_name)[0]))
         try:    
             self.info.to_json(self.info_path)
         except Exception as e:
@@ -203,9 +205,6 @@ class Note():
             self.parse(self.content_path)
               # 等用于writeContent函数，另外前序函数已进行isfile判断了
         # 新建info文件
-        self.createInfo()
-        self.info_path = os.path.join(self.path, "{}.info".format(os.path.splitext(self.content_name)[0]))
-        # print(self.info_path)
         self.writeInfo()
         # 新建附件文件夹
         os.makedirs(os.path.join(self.path, "附件")) 
@@ -227,32 +226,27 @@ class Note():
         else: 
             self.index = self.index.drop(self.id)
             self.writeIndex()
-    
-    def archive(self):
-        if self.type == 'Archive':
-            print(f"{self.id} {self.title} 已经是存档文件")
-        else:
-            self.type = 'Archive'
-            oldpath = self.path
-            self.path = os.path.join(self.root, f"{self.type}/{self.id}/")
-            self.createInfo()
-            self.writeInfo()
-            shutil.move(oldpath, self.path)
-            self.index.loc[self.id] = self.info
-            self.writeIndex()
-    
-    def update(self):
-        try:
-            send2trash(os.path.abspath(self.content_path)) 
-        except Exception as e:
-            print("笔记删除出错",e)
-        else:
-            self.content_path = os.path.join(self.path, f"{self.title}{self.ext}")
+     
+    def update(self, mode):
+        if self.ext == ".html":
+            send2trash(os.path.abspath(self.content_path))
+            self.content_name = f"{self.title}{self.ext}"
+            self.content_path = os.path.join(self.path, self.content_name)
             self.writeContent()
-            self.createInfo()
-            self.writeInfo()
-            self.index.loc[self.id] = self.info
-            self.writeIndex()
+        send2trash(os.path.abspath(self.info_path))
+        self.writeInfo()
+        if mode=="Archive":    
+            if self.type == 'Archive':
+                print(f"已经是存档文件: {self.id} {self.title}")
+            else:
+                self.type = 'Archive'
+                oldpath = self.path
+                self.path = os.path.join(self.root, f"{self.type}/{self.id}/")
+                shutil.move(oldpath, self.path)
+        else: # "save"    
+            pass
+        self.index.loc[self.id] = self.info
+        self.writeIndex()
         
     def read(self):
         try:
