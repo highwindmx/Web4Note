@@ -6,9 +6,8 @@ $(document).ready(function () {
         var btn_v = document.getElementById("view-btn");
         btn_v.style["background-color"] = 'lightblue';
         frames['wysiwyg'].document.designMode = 'on';
-        //console.log(frames['wysiwyg'].src) 
     };
-    // 存档用的脚本 <a class="nav-link" href="{{ url_for('archive') }}">存档</a>
+    // 存档用的脚本
     $('#arch-btn').click(function() {
         var note_t = document.getElementById("note-title").value;
         var note_k = document.getElementById("note-keywords").value;
@@ -31,7 +30,7 @@ $(document).ready(function () {
             }
         });
     });
-        // 存档用的脚本 <a class="nav-link" href="{{ url_for('archive') }}">存档</a>
+    // 保存用的脚本 
     $('#save-btn').click(function() {
         var note_t = document.getElementById("note-title").value;
         var note_k = document.getElementById("note-keywords").value;
@@ -44,7 +43,7 @@ $(document).ready(function () {
             type: 'POST',
             url: "/_save",
             data: JSON.stringify(data),
-            dataType: 'json', // 注意：这里是指希望服务端返回json格式的数据
+            dataType: 'json',
             contentType:'application/json; charset=utf-8',
             success: function(data) { 
                 //console.log("cool", data)

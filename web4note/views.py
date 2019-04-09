@@ -8,28 +8,35 @@ from web4note.database import Note
 NOTEINDEXCOLS= ["type","title","path","ctime","mtime","atime"
                ,"url","ext","keywords"]
 
+# 附件相关功能还没有设计完成！！！
+# 日历未完成
+# 词云未完成
+# 追加功能还未验证
+# 高级查找，查找重复
+               
 @app.route('/')
 @app.route('/index')
 @app.route('/table')
 def index():
-    page = render_template("index.html" ,title = 'Home - 网页笔记本')
+    note = Note(NOTEROOT, NOTEINDEXCOLS)
+    note.getUpdateTime() 
+    session['update_time'] = note.index_update_time 
+    # 暂存更新时间（以打开笔记本时为准），防止后续读写index导致更新时间有误
+    page = render_template("index.html" ,title = '索引页 - 网页笔记本')
     return page
 
 @app.route('/_get_table')
 def getTable():
-    # df = pd.DataFrame(np.random.randint(0, 100, size=(a, b)))
-    # df = pd.read_json('list2.json')
-    # dj = df.to_json(orient="split")
-    # print(df)
     note = Note(NOTEROOT, NOTEINDEXCOLS)
     note.readIndex()
-    df = note.index # pd.read_json('list1.json', convert_dates=["atime","ctime","mtime"], orient="split")
+    # 导入并规整加载到表格里的数据格式
+    df = note.index
     df['title'] = "<a href='load/"+ df['type'] + "/" + df.index + "'>" + df['title'] + "</a>" # 改造title使之超链接化
-    df['atime'] = df['atime'].apply(lambda x: x.strftime('%Y-%m-%d'))
+    df['atime'] = df['atime'].apply(lambda x: x.strftime('%Y-%m-%d')) # 日期格式化
     df['ctime'] = df['ctime'].apply(lambda x: x.strftime('%Y-%m-%d'))
     df['mtime'] = df['mtime'].apply(lambda x: x.strftime('%Y-%m-%d'))
-    df = df[['type','ext','title','mtime','atime','ctime','keywords']]
-    dj = df.to_json(orient="split")
+    df = df[['type','ext','title','mtime','atime','ctime','keywords']] # 忽略path url，同时调整顺序
+    dj = df.to_json(orient="split") # orient="split" 可能和后边的json.loads有关！！！
     #print(dj)
     return jsonify(note_list=json.loads(dj)["data"],
                    columns=[{"title": str(col)} for col in json.loads(dj)["columns"]])
@@ -42,18 +49,17 @@ def load(tp, idx):
     note = Note(NOTEROOT, NOTEINDEXCOLS)
     note.locate(session['type'], session['id'])
     page = render_template("edit.html"
-                          ,title = 'Home'
+                          ,title = '笔记页'
                           ,noteinfo = note
-                          ,source= url_for('sendPage')
+                          ,source= url_for('sendPage')  # 采用这种方法使得本不能加载本地网页的iframe重新可用
                           )
     return page
     
 @app.route('/_get_page')
 def sendPage():
     note = Note(NOTEROOT, NOTEINDEXCOLS)
-    note.locate(session['type'], session['id'])
-    #session['dir'] = note.path
-    #session['file'] = note.content_name
+    note.locate(session['type'], session['id']) 
+    # 虽然session不接受dataframe格式，但是可以通过session在函数间共享当前笔记的id和type，然后再locate，模拟数据库的功能
     return send_from_directory(note.path, note.content_name) # 采用这种方法使得本不能加载本地网页的iframe重新可用
 
 @app.route('/_delete')
@@ -62,7 +68,7 @@ def delete():
     note.locate(session['type'], session['id'])
     fname = note.content_name
     note.delete()
-    page = render_template("update.html" ,title = '删除后 - 网页笔记本' ,info = f"已删除笔记: {fname} ")
+    page = render_template("update.html" ,title = '删除后 - 网页笔记本' ,info = f"已删除笔记: {fname} ") # update.html与index.html共享使用table.html
     return page
 
 @app.route('/_archive', methods=["POST"])
@@ -76,7 +82,7 @@ def archive():
     note.keywords = data['keywords']
     note.content = data['content']
     note.update("Archive")
-    return "存档完毕" #page
+    return "存档完毕"
 
 @app.route('/_save', methods=["POST"])
 def save():

@@ -1,20 +1,51 @@
 import os
-from datetime import datetime
-import shutil
-import pathlib
 import uuid
-import pandas as pd
+from datetime import datetime
+import pathlib
+import shutil
 from send2trash import send2trash
 from bs4 import (BeautifulSoup, Comment)
 import lxml # 不一定用，但与bs4解析网页时相关模块有联系，作为模块预装的提示吧
+import pandas as pd
+
 
 def getDir(dir):
     d = os.path.abspath(dir)
     if not os.path.exists(d):
-        os.makedirs(d) # 不同于mkdir 这个方法可以巢式新建文件夹
+        os.makedirs(d) # 不同于mkdir makedirs方法可以巢式新建文件夹
     return d
 
 class Note():
+    """
+    ：：：由于混在一起设计了稍微写下省的犯错：：：
+    
+    self.root = 笔记库根目录
+    self.index = 索引表本身
+    self.index_cols = 索引中的格列标题
+    self.index_path = 索引的保存路径
+    self.index_update_time = 索引的更新时间
+    
+    self.id = id
+    self.ext = 扩展名
+    self.title = 标题
+    self.type = 分类
+    self.keywords = 关键词
+    self.path = 笔记文件夹的路径 os.path.join(self.root, f"{self.type}/{self.id}/")
+    self.url = 外链
+    self.atime = atime access?
+    self.ctime = ctime create?
+    self.mtime = mtime modify
+    self.content = 内容本身
+    self.content_name = 内容的文件名 f"{self.title}{self.ext}"
+    self.content_path = 内容的保存路径
+    
+    self.info = info内容本身
+    self.info_path = info的保存路径
+    
+    self.att_path = 附件文件夹路径
+    
+    """
+    
     def __init__(self, root, cols):
         self.root = root
         self.index_cols = cols
@@ -23,6 +54,7 @@ class Note():
         self.index_path = os.path.join(root, "Index/Note_index.json")
         self.createIndex()
     
+    # index ########################      
     def createIndex(self):
         if os.path.exists(self.index_path):
             self.readIndex()
@@ -39,7 +71,6 @@ class Note():
     def readIndex(self):
         try:
             self.index = pd.read_json(self.index_path, convert_dates=["atime","ctime","mtime"], orient='split')
-            self.index_update_time = datetime.fromtimestamp(os.path.getmtime(self.index_path))
         except Exception as e:
             print("索引表读取出错：", e)
     
@@ -55,19 +86,19 @@ class Note():
             print("索引表存档出错：", e)
         else:
             self.createIndex()
-  
-    def add2Index(self):
-        self.index.loc[self.id] = self.info
-
-    def sortIndex(self, mode): 
-        ds = self.index.loc[self.index['type']==mode].copy()
-        ds.sort_values(by='title', inplace=True)
-        return ds
+    
+    def getUpdateTime(self):
+        self.index_update_time = datetime.fromtimestamp(os.path.getmtime(self.index_path))
         
-    #############################        
+    # def sortIndex(self, mode): 
+    #     ds = self.index.loc[self.index['type']==mode].copy()
+    #     ds.sort_values(by='title', inplace=True)
+    #     return ds
+        
+    # 内容 ########################        
     def createContent(self):
-        self.content = f"<!DOCTYPE html><html><meta charset='utf-8'><head><title>{self.title}</title></head>"
-        self.content += f'<body>文件生成于{datetime.now().strftime("%Y-%m-%d_%H:%M:%S")}，请开始记录吧</body></html>'
+        self.contefnt = f"<!DOCTYPE html><html><meta charset='utf-8'><head><title>{self.title}</title></head>"
+        self.content += '<body>文件生成于{datetime.now().strftime("%Y-%m-%d_%H:%M:%S")}，请开始记录吧</body></html>'
     
     def writeContent(self):
         try:
@@ -96,7 +127,7 @@ class Note():
             if i==1:
                 break
     
-    def parse(self, p):
+    def parseContent(self, p):
         [self.title, self.ext] = os.path.splitext(self.content_name)
         name_s = self.content_name.split("(")[0]
         if not name_s: # != ""
@@ -138,15 +169,11 @@ class Note():
         else: # 对于可能是图片或者pdf格式的各类非html笔记
             pass
     
-    #############################     
+    # info ##########################     
     def createInfo(self):
         self.info = pd.Series([self.type, self.title, self.path, self.ctime, self.mtime, self.atime\
                               ,self.url, self.ext, self.keywords]
                               ,index=self.index_cols)
-        # self.data = pd.DataFrame()
-        # self.data = self.data.append(self.info, ignore_index=True)
-        # self.data.index=[self.id]
-        # print(self.data)
         
     def writeInfo(self):
         self.createInfo()
@@ -163,7 +190,7 @@ class Note():
         self.url = self.info["url"]
         self.keywords = self.info["keywords"]
 
-    #############################     
+    # 附件 #######################     
     def readAtt(self):
         self.att_path = os.path.join(self.path, "附件")
         try:
@@ -176,7 +203,7 @@ class Note():
     # addAtt
     # delAtt
     # 
-    #############################     
+    # 笔记本身 ########################     
     def create(self, p=None):
         self.id = str(uuid.uuid1())
         self.type = "Draft"
@@ -202,14 +229,15 @@ class Note():
         else: # 由已有文件生成
             self.content_name = os.path.basename(p) # 
             self.content_path = shutil.copy2(p, self.path)
-            self.parse(self.content_path)
-              # 等用于writeContent函数，另外前序函数已进行isfile判断了
+            self.parseContent(self.content_path)
+             # 等效于writeContent函数，另外前序函数已进行isfile判断了
         # 新建info文件
         self.writeInfo()
         # 新建附件文件夹
         os.makedirs(os.path.join(self.path, "附件")) 
-        # 新建或更新索引表，意味着索引表就算错了更新，但文件本身不出错就行
-        self.index.loc[self.id] = self.info       
+        # 新建或更新索引表，意味着索引表就算更新错了，但文件本身不出错就行
+        self.index.loc[self.id] = self.info
+        self.writeIndex()        
     
     def locate(self, tp, idx):
         self.id = idx
@@ -272,8 +300,7 @@ class Note():
                 self.mtime = datetime.fromtimestamp(os.path.getmtime(path))    
    #############################################################################         
 
-    # 读取所有旧有的
-    # 增加新增的
+    # 重新或追加索引
     def renewIndex(self, mode, newpath):
         self.readIndex() # 获得self.index_update_time
         self.archiveIndex() # 先存档
@@ -296,7 +323,7 @@ class Note():
                     self.path = os.path.join(self.root, f"{self.type}/{self.id}/")
                     if os.path.isdir(self.path) and isValidUUID(self.id):
                         self.read()
-                        self.add2Index()
+                        self.index.loc[self.id] = self.info # 信息加入index
                         count += 1
                         print(f"已加入{count}条笔记")
                     else:
@@ -308,15 +335,15 @@ class Note():
             if os.path.isfile(p):
                 time_compare1 = (datetime.fromtimestamp(os.path.getatime(p))>self.index_update_time) #.any()
                 time_compare2 = (datetime.fromtimestamp(os.path.getmtime(p))>self.index_update_time)
-                if (time_compare1 and time_compare2):
-                    # print(f"奇怪!居然有之前没导入的混入：{nn}")
+                if (time_compare1 and time_compare2): # 肯定是新加入摘取的
                     self.create(p)
-                    self.add2Index()
-                else:
-                    # print(f"旧笔记：{nn}还在暂存笔记库中")
-                    self.create(p)
-                    self.add2Index()
-                count += 1
+                    self.index.loc[self.id] = self.info # 信息加入index
+                    count += 1
+                else: # 疑似已经加入笔记库的了
+                    print(f"疑似旧笔记：{nn} 暂未存入笔记库中")
+                    # self.create(p)
+                    # self.index.loc[self.id] = self.info # 信息加入index
+                    # count += 1
                 print(f"已加入{count}条笔记")    
             else:
                 print(f"新增混入：{nn}无法添加")                             

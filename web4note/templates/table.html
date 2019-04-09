@@ -2,21 +2,24 @@
 <html lang="zh_CN">
 <meta charset="utf-8">
     <head>
+        <!--测试block的功能-->
         {% block title %}{% endblock %}
+        <!--加载程序图标-->
         <link rel="shortcut icon" type="image/x-icon" href={{ url_for("static", filename="favicon.ico") }}>
-        <!--link rel="stylesheet" type="text/css" href={{ url_for("static", filename="styles.css") }}-->
+        <!--加载外部CSS--> 
         <link rel='stylesheet' type="text/css" href={{ url_for('static', filename="font-awesome-4.7.0/css/font-awesome.css") }}>
         <link rel="stylesheet" type="text/css" href={{ url_for('static', filename='bootstrap-4.3.1-dist/css/bootstrap.min.css') }}>
         <link rel='stylesheet' type="text/css" href={{ url_for('static', filename="dataTables-1.10.18/dataTables.bootstrap4.min.css") }}>
         <link rel='stylesheet' type="text/css" href={{ url_for('static', filename="dataTables-1.10.18/jquery.dataTables.min.css") }}>
-        
+        <!--加载外部JS-->
         <script type="text/javascript" src={{ url_for('static', filename="jquery-3.3.1/jquery-3.3.1.min.js") }}></script>
         <script type="text/javascript" src={{ url_for('static', filename="bootstrap-4.3.1-dist/js/bootstrap.min.js") }}></script>
         <script type="text/javascript" src={{ url_for('static', filename="dataTables-1.10.18/dataTables.bootstrap4.min.js") }}></script>
         <script type="text/javascript" src={{ url_for('static', filename="dataTables-1.10.18/jquery.dataTables.min.js") }}></script>
-        <script type="text/javascript" src={{ url_for('static', filename='tablescript.js') }}></script>        
+        <script type="text/javascript" src={{ url_for('static', filename='tablescript.js') }}></script>  
     </head>
     <body>
+        <!--顶部导航栏-->
         <div class="pos-f-t">
             <nav class="navbar navbar-dark bg-dark">
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggleExternalContent" aria-controls="navbarToggleExternalContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -26,15 +29,14 @@
             </nav>
             <div class="collapse" id="navbarToggleExternalContent">
                 <div class="bg-dark p-4">
-                    <h4 class="text-white">笔记操作</h4>
+                    <h4 class="text-white">笔记库操作</h4>
                     <span class="text-muted">现在可以对笔记库进行这些操作：</span>
                     <button class="btn btn-secondary" id="update-all"><i class="fa fa-hourglass"></i>重置</button>
                     <button class="btn btn-secondary" id="update-new"><i class="fa fa-hourglass-end"></i>追加</button>
-                    <button class="btn btn-secondary" id="calendar"   onclick="showCalender()"><i class="fa fa-calendar-check-o"></i>日历</button>
-                    <button class="btn btn-secondary" id="wordcloud"  onclick="showCloud()"><i class="fa fa-cloud"></i>词云</button>
                 </div>
             </div>
         </div>
+        <!--下方tab页切换导航-->
         <nav>
             <div class="nav nav-tabs " id="nav-tab" role="tablist">
                 <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-home" aria-selected="true">笔记列表</a>
@@ -44,11 +46,13 @@
         </nav>
         <div class="tab-content" id="nav-tabContent">
             <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+            <!--WWW笔记列表WWW-->
                 <div class="table">
-                    <table id="note_list_table"></table> <!--Here should be a table <div class="header"><h3 class="text-muted">我的笔记列表</h3></div>-->
+                    <table id="note_list_table"></table>
                 </div>
             </div>
             <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
+            <!--所谓高级检索，！！！还未完成！！！-->
                 <div class="search-module">
                     <button id="search-reset-btn"><i class="fa fa-circle-o"></i>重置</button>             
                     <textarea id="search-input" name="Text1" ></textarea>
@@ -61,9 +65,13 @@
                         <i class="fa fa-search"></i>检索
                     </button> 
                 </div> 
-            
             </div>
-            <div class="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab">哥们儿你太帅了！</div>
+            <div class="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab">
+            <!--！！！日历和词云功能未完成，和其他还没想好的功能！！！-->
+                <button class="btn btn-secondary" id="calendar"   onclick="showCalender()"><i class="fa fa-calendar-check-o"></i>日历</button>
+                <button class="btn btn-secondary" id="wordcloud"  onclick="showCloud()"><i class="fa fa-cloud"></i>词云</button>
+                哥们儿你太帅了！
+            </div>
         </div>
     </body>
 </html>
