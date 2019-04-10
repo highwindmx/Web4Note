@@ -303,7 +303,7 @@ class Note():
                         self.readInfo() # 以后也可以设计先查info，如有问题则重新parse
                 else: # read attachment
                     self.readAtt()
-            if info_exist == 0: # 这里的鲁棒性不一定很好，后续还可以再想想优化一下
+            if info_exist == 0: # ！！！这里的鲁棒性不一定很好，后续还可以再想想优化一下！！！
                 print(f"读取{self.path}的info出错")
                 if content_exist == 1:
                     self.parseContent(self.content_path) # 读取content作为补救
