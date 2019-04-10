@@ -20,10 +20,10 @@ app.config.from_mapping(
     
 if uuid.getnode() == HOME_MAC: 
     note_dir = "D:/Share/note7web" # home
-    new_note_dir = "D:/Share/notebook/draft"
+    new_note_dir = "D:/Share/notebook"
 elif uuid.getnode() == WORK_MAC: 
     note_dir = "E:/Share/Note7Web" # work
-    new_note_dir = "E:/Share/notebook/draft"
+    new_note_dir = "E:/Share/notebook"
     # note_dir = "E:/Share/test/bb" # work test
     # new_note_dir = "E:/Share/test/aa"
 else:

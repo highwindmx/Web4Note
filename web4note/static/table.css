@@ -1,0 +1,15 @@
+#note_list_table.dataTable tbody td{
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+#note_list_table.dataTable td:nth-child(1){
+    max-width:60px;
+}
+#note_list_table.dataTable td:nth-child(3){
+    max-width:720px;
+}
+#note_list_table.dataTable td:nth-child(7){
+    max-width:200px;
+    color: purple;
+}

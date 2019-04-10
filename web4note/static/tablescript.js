@@ -11,7 +11,18 @@ $(document).ready(function () { //用这种办法可以避免第一次执行要�
             }
             table = $("#note_list_table").DataTable({
                 data: data.note_list,
-                columns: data.columns
+                columns: data.columns,
+                "lengthMenu": [[15, 30, 60, -1], [15, 30, 60, "All"]],
+                //columnDefs: [
+                //// the target for this configuration, 0 it's the first column
+                //    { targets: 6, render: $.fn.dataTable.render.ellipsis(10) }
+                //],
+                //aoColumnDefs: [{
+                //    fnRender: function(oObj){
+                //        return oObj.aData[0] +""+ oObj.aData[1];
+                //    },
+                //    aTargets: [2]}
+                //],
             });
         }
     );    
@@ -23,7 +34,7 @@ $(document).ready(function () { //用这种办法可以避免第一次执行要�
         //console.log(data);
         $.ajax({
             type: 'POST',
-            url: "/update",
+            url: "/_update",
             data: JSON.stringify(data),
             dataType: 'json', // 注意：这里是指希望服务端返回json格式的数据
             contentType:'application/json; charset=utf-8',
@@ -43,7 +54,7 @@ $(document).ready(function () { //用这种办法可以避免第一次执行要�
         //console.log(data);
         $.ajax({
             type: 'POST',
-            url: "/update",
+            url: "/_update",
             data: JSON.stringify(data),
             dataType: 'json', // 注意：这里是指希望服务端返回json格式的数据
             contentType:'application/json; charset=utf-8',

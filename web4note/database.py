@@ -7,6 +7,8 @@ from send2trash import send2trash
 from bs4 import (BeautifulSoup, Comment)
 import lxml # 不一定用，但与bs4解析网页时相关模块有联系，作为模块预装的提示吧
 import pandas as pd
+from wordcloud import WordCloud
+import jieba
 
 
 def getDir(dir):
@@ -237,7 +239,7 @@ class Note():
         os.makedirs(os.path.join(self.path, "附件")) 
         # 新建或更新索引表，意味着索引表就算更新错了，但文件本身不出错就行
         self.index.loc[self.id] = self.info
-        self.writeIndex()        
+        #self.writeIndex()  否则后边更新新增时会反复读写      
     
     def locate(self, tp, idx):
         self.id = idx
@@ -282,27 +284,36 @@ class Note():
         except Exception as e:
             print("读取笔记错误",e)
         else:
+            info_exist = 0
+            content_exist = 0
             for f in fl:    
                 path = os.path.join(self.path, f)
                 if os.path.isfile(path):
                     if os.path.splitext(f)[1] != ".info":
+                        content_exist = 1
                         self.content_path = path
                         self.content_name = os.path.basename(path)
                         self.ext = os.path.splitext(f)[1]
-                        self.readContent()
+                        self.atime = datetime.fromtimestamp(os.path.getatime(self.content_path))
+                        self.ctime = datetime.fromtimestamp(os.path.getctime(self.content_path))  # ctime 在unix和win上表示的意义不全相同，不一定是create time也可能是change time
+                        self.mtime = datetime.fromtimestamp(os.path.getmtime(self.content_path))
                     else:  # read json
+                        info_exist = 1
                         self.info_path = path
                         self.readInfo() # 以后也可以设计先查info，如有问题则重新parse
                 else: # read attachment
                     self.readAtt()
-                self.atime = datetime.fromtimestamp(os.path.getatime(path))
-                self.ctime = datetime.fromtimestamp(os.path.getctime(path))  # ctime 在unix和win上表示的意义不全相同，不一定是create time也可能是change time
-                self.mtime = datetime.fromtimestamp(os.path.getmtime(path))    
+            if info_exist == 0: # 这里的鲁棒性不一定很好，后续还可以再想想优化一下
+                print(f"读取{self.path}的info出错")
+                if content_exist == 1:
+                    self.parseContent(self.content_path) # 读取content作为补救
+                else:
+                    print(f"读取{self.path}的内容也出错")
    #############################################################################         
 
     # 重新或追加索引
     def renewIndex(self, mode, newpath):
-        self.readIndex() # 获得self.index_update_time
+        self.getUpdateTime() # 获得self.index_update_time
         self.archiveIndex() # 先存档
         def isValidUUID(idstring, version=1):
             try:
@@ -325,18 +336,24 @@ class Note():
                         self.read()
                         self.index.loc[self.id] = self.info # 信息加入index
                         count += 1
-                        print(f"已加入{count}条笔记")
                     else:
                         print(f"原库中混入：{i}无法添加")
+                    if count % 10 == 0:
+                        print(f"已加入{count}条笔记")
+                    else:
+                        pass    
         # 解析新增的
-        nl = os.listdir(newpath)
+        todo_dir = getDir(os.path.join(newpath,"Draft"))
+        done_dir = getDir(os.path.join(newpath,"imported"))
+        nl = os.listdir(todo_dir)
         for nn in nl:
-            p = os.path.join(newpath, nn)
+            p = os.path.join(todo_dir, nn)
             if os.path.isfile(p):
                 time_compare1 = (datetime.fromtimestamp(os.path.getatime(p))>self.index_update_time) #.any()
                 time_compare2 = (datetime.fromtimestamp(os.path.getmtime(p))>self.index_update_time)
                 if (time_compare1 and time_compare2): # 肯定是新加入摘取的
                     self.create(p)
+                    shutil.move(p, done_dir) # 防止之后的重复导入
                     self.index.loc[self.id] = self.info # 信息加入index
                     count += 1
                 else: # 疑似已经加入笔记库的了
@@ -344,9 +361,13 @@ class Note():
                     # self.create(p)
                     # self.index.loc[self.id] = self.info # 信息加入index
                     # count += 1
-                print(f"已加入{count}条笔记")    
+                if count % 10 == 0:
+                    print(f"已加入{count}条笔记")
+                else:
+                    pass
             else:
                 print(f"新增混入：{nn}无法添加")                             
+        print(f"共加入{count}条笔记")
         self.writeIndex()
 
    #############################################################################   
@@ -380,7 +401,22 @@ class Note():
             cc = self.index.duplicated(subset=['title'], keep=False)
         return self.index[cc]    
         
-                    
+    def doStatistics(self):
+        tb = self.index["keywords"]
+        text = "/".join(jieba.cut(" ".join(tb)))
+        #print(text)
+        #print(os.path.abspath("./"))
+        try:
+            wc = WordCloud(background_color="white"
+                          ,font_path="./web4note/static/font/GenWanMinTW-Regular.ttf"
+                          ,margin=2
+                          ,width=800
+                          ,height=400
+                          ).generate(text)
+        except Exception as e:
+            print("词云生成错误：",e)
+        else:
+            wc.to_file("./web4note/static/images/wordcloud.png") 
     
     
     

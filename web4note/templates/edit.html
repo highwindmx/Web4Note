@@ -2,19 +2,24 @@
 <html lang="zh_CN">
 <meta charset="utf-8">
     <head>
+        <!--网页标题-->
         <title>{{title}} - 网页笔记本</title>
-        <link rel="shortcut icon" type="image/x-icon" href={{ url_for("static", filename="favicon.ico") }}>
+        <!--网页图标-->
+        <link rel="shortcut icon" type="image/x-icon" href={{ url_for("static", filename="images/sunme.ico") }}>
+        <!--加载CSS-->
         <link rel="stylesheet" type="text/css" href={{ url_for('static', filename='bootstrap-4.3.1-dist/css/bootstrap.min.css') }}>
         <link rel='stylesheet' type="text/css" href={{ url_for('static', filename="font-awesome-4.7.0/css/font-awesome.css") }}>
         <link rel="stylesheet" type="text/css" href={{ url_for("static", filename="styles.css") }}>
-        
+        <!--加载JS-->
         <script type="text/javascript" src={{ url_for('static', filename="jquery-3.3.1/jquery-3.3.1.min.js") }}></script>
         <script type="text/javascript" src={{ url_for('static', filename="bootstrap-4.3.1-dist/js/bootstrap.min.js") }}></script>
         <script type="text/javascript" src={{ url_for('static', filename='editscript.js') }}></script>
     </head>
     <body>
         <div class="main-container">
+        <!--放在一起方便css中使用grid 从而可以把iframe纵向展开-->
             <nav class="navbar navbar-expand-lg fixed-top navbar-dark bg-dark">
+            <!--顶部导航栏-->
                 <a class="navbar-brand" href="#">
                     我的笔记<span class="badge badge-light m-1">{{ noteinfo['id'] }}</span>
                 </a>
@@ -42,6 +47,7 @@
                 </div>
             </nav>
             <div class="info-module">
+            <!--信息栏-->
                 <div class="input-group mb-0">
                     <div class="input-group-prepend">
                         <span class="input-group-text" id="basic-addon3">标题：</span>
@@ -56,7 +62,7 @@
                 </div>
             </div>
             <div class="WYSIWYG-buttons-container">
-                
+            <!--笔记修饰按钮栏-->    
                 <button class="WYSIWYG-button btn btn-light" id="view-btn"><i class="fa fa-eye"></i>阅览</button>                                 
                 <button class="WYSIWYG-button btn btn-light" id="edit-btn"><i class="fa fa-pencil"></i>编辑</button>           
                 <button class="WYSIWYG-button btn btn-light" id="bold-btn" data-name="bold">加粗</button>
@@ -66,12 +72,12 @@
                 <button class="WYSIWYG-button btn btn-light" id="rmfmt-btn" data-name="removeFormat"><i class="fa fa-times"></i>清除格式</button>
                 <button class="WYSIWYG-button btn btn-light" id="numli-btn" data-name="insertorderedlist">1.数列</button>
                 <button class="WYSIWYG-button btn btn-light" id="dotli-btn" data-name="insertunorderedlist">● 点列</button>
-            </div><!--上边是WYSIWYG的各种按钮-->
-                <!--附件将以拖拽形式呈现-->
-            <!--iframe class="WYSIWYG-note" name="wysiwyg" src={{ url_for("static", filename=source) }}></iframe-->
-            <!--div class="WYSIWYG-note">不要随便加div不然脚本在DOM里会找不到这个组件的</div--> 
+            </div>
+            <!--附件将以拖拽形式呈现，暂时还未实现-->
+
+            <!--不要随便给iframe加div不然脚本在DOM里会找不到这个组件--> 
             <iframe class="WYSIWYG-note" name="wysiwyg" src={{ source }}></iframe> 
-                       
+            <!--iframe class="WYSIWYG-note" name="wysiwyg" src={{ url_for("static", filename=source) }}></iframe-->         
         </div> 
     </body>
 </html>

@@ -5,12 +5,13 @@
         <!--测试block的功能-->
         {% block title %}{% endblock %}
         <!--加载程序图标-->
-        <link rel="shortcut icon" type="image/x-icon" href={{ url_for("static", filename="favicon.ico") }}>
+        <link rel="shortcut icon" type="image/x-icon" href={{ url_for("static", filename="images/favicon.ico") }}>
         <!--加载外部CSS--> 
         <link rel='stylesheet' type="text/css" href={{ url_for('static', filename="font-awesome-4.7.0/css/font-awesome.css") }}>
         <link rel="stylesheet" type="text/css" href={{ url_for('static', filename='bootstrap-4.3.1-dist/css/bootstrap.min.css') }}>
         <!--link rel='stylesheet' type="text/css" href={{ url_for('static', filename="dataTables-1.10.19/dataTables.bootstrap4.min.css") }}-->
         <link rel='stylesheet' type="text/css" href={{ url_for('static', filename="dataTables-1.10.19/jquery.dataTables.min.css") }}>
+        <link rel='stylesheet' type="text/css" href={{ url_for('static', filename="table.css") }}>
         <!--加载外部JS-->
         <script type="text/javascript" src={{ url_for('static', filename="jquery-3.3.1/jquery-3.3.1.min.js") }}></script>
         <script type="text/javascript" src={{ url_for('static', filename="bootstrap-4.3.1-dist/js/bootstrap.min.js") }}></script>
@@ -39,19 +40,51 @@
         <!--下方tab页切换导航-->
         <nav>
             <div class="nav nav-tabs " id="nav-tab" role="tablist">
-                <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-home" aria-selected="true">笔记列表</a>
-                <a class="nav-item nav-link" id="nav-profile-tab" data-toggle="tab" href="#nav-profile" role="tab" aria-controls="nav-profile" aria-selected="false">复杂检索</a>
-                <a class="nav-item nav-link" id="nav-contact-tab" data-toggle="tab" href="#nav-contact" role="tab" aria-controls="nav-contact" aria-selected="false">关于</a>
+                <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-home" aria-selected="true"><i class="fa fa-list-alt"></i>笔记列表</a>
+                <a class="nav-item nav-link" id="nav-wordcloud-tab" data-toggle="tab" href="#nav-wordcloud" role="tab" aria-controls="nav-wordcloud" aria-selected="false"><i class="fa fa-cloud"></i>统计词云</a>
+                <a class="nav-item nav-link" id="nav-search-tab" data-toggle="tab" href="#nav-search" role="tab" aria-controls="nav-search" aria-selected="false"><i class="fa fa-search"></i>复杂检索</a>
+                <a class="nav-item nav-link" id="nav-calendar-tab" data-toggle="tab" href="#nav-calendar" role="tab" aria-controls="nav-calendar" aria-selected="false"><i class="fa fa-calendar-check-o"></i>日历</a>
             </div>
         </nav>
         <div class="tab-content" id="nav-tabContent">
             <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
-            <!--WWW笔记列表WWW-->
+            <!--WWW笔记列表WWW  table-hover no-margin text-center  -->
                 <div class="table">
-                    <table id="note_list_table"></table>
+                    <!--table class="stripe display compact cell-overflow" id="note_list_table"></table-->
+                    <table class="table striped compact" id="note_list_table"></table>
+                    
                 </div>
             </div>
-            <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
+            <div class="tab-pane fade" id="nav-wordcloud" role="tabpanel" aria-labelledby="nav-wordcloud-tab">
+            <!--！！！统计内容开始-->
+                <div class="input-group mb-0">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="basic-addon3">笔记加载文件夹：</span>
+                    </div>
+                    <input type="text" class="form-control" id="basic-url" aria-describedby="basic-addon3" value="{{ note_root }}">
+                </div>
+                <div class="input-group mb-0">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="basic-addon3">新增笔记文件夹：</span>
+                    </div>
+                    <input type="text" class="form-control" id="basic-url" aria-describedby="basic-addon3" value="{{ note_new_dir }}">
+                </div>
+                <div class="input-group mb-0">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="basic-addon3">末次更新时间为：</span>
+                    </div>
+                    <input type="text" class="form-control" id="basic-url" aria-describedby="basic-addon3" value="{{ note_update_time }}">
+                </div>
+                <div class="input-group mb-0">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="basic-addon3">笔记计数：</span>
+                    </div>
+                    <input type="text" class="form-control" id="basic-url" aria-describedby="basic-addon3" value="{{ note_count }}">
+                </div>               
+                 <!--！！！词云图片-->
+                <img src={{ url_for('static', filename='images/wordcloud.png') }} width="800px" height="400px">
+            </div>
+            <div class="tab-pane fade" id="nav-search" role="tabpanel" aria-labelledby="nav-search-tab">
             <!--所谓高级检索，！！！还未完成！！！-->
                 <div class="search-module">
                     <button id="search-reset-btn"><i class="fa fa-circle-o"></i>重置</button>             
@@ -66,10 +99,10 @@
                     </button> 
                 </div> 
             </div>
-            <div class="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab">
-            <!--！！！日历和词云功能未完成，和其他还没想好的功能！！！-->
-                <button class="btn btn-secondary" id="calendar"   onclick="showCalender()"><i class="fa fa-calendar-check-o"></i>日历</button>
-                <button class="btn btn-secondary" id="wordcloud"  onclick="showCloud()"><i class="fa fa-cloud"></i>词云</button>
+
+            <div class="tab-pane fade" id="nav-calendar" role="tabpanel" aria-labelledby="nav-calendar-tab">
+            <!--！！！日历功能未完成-->
+                <button class="btn btn-secondary" id="calendar"   onclick="showCalender()">日历</button>
                 哥们儿你太帅了！
             </div>
         </div>
