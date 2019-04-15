@@ -5,11 +5,9 @@ from flask import (render_template, send_from_directory, url_for, session, g, js
 from web4note import (app, NOTEROOT, NEWNOTEDIR)#, TEMPLIST) 
 from web4note.database import Note
 
-NOTEINDEXCOLS= ["type","title","path","ctime","mtime","atime"
-               ,"url","ext","keywords"]
 
-# 笔记更新追加功能还未完成！！！
 
+# 关键词的间隔符还没有完成
 # 附件相关功能还没有设计完成！！！
 # 日历未完成
 # 高级查找，查找重复
@@ -18,7 +16,7 @@ NOTEINDEXCOLS= ["type","title","path","ctime","mtime","atime"
 @app.route('/index')
 @app.route('/table')
 def index():
-    note = Note(NOTEROOT, NOTEINDEXCOLS)
+    note = Note(NOTEROOT)
     note.getUpdateTime() 
     session['update_time'] = note.index_update_time 
     # 暂存更新时间（以打开笔记本时为准），防止后续读写index导致更新时间有误
@@ -38,7 +36,7 @@ def index():
 
 @app.route('/_get_table')
 def getTable():
-    note = Note(NOTEROOT, NOTEINDEXCOLS)
+    note = Note(NOTEROOT)
     note.readIndex()
     # 导入并规整加载到表格里的数据格式
     df = note.index
@@ -46,7 +44,10 @@ def getTable():
     df['atime'] = df['atime'].apply(lambda x: x.strftime('%Y-%m-%d')) # 日期格式化
     df['ctime'] = df['ctime'].apply(lambda x: x.strftime('%Y-%m-%d'))
     df['mtime'] = df['mtime'].apply(lambda x: x.strftime('%Y-%m-%d'))
-    df = df[['type','ext','title','mtime','atime','ctime','keywords']] # 忽略path url，同时调整顺序
+    #df['att'] = df['att_list']
+    df = df[['type','title','att_num','keywords','mtime','atime','ctime']] 
+    df.columns = ['Type', '标题', '附', '关键词', 'mtime', 'atime', 'ctime']
+    # 忽略path url，同时调整顺序
     dj = df.to_json(orient="split") # orient="split" 可能和后边的json.loads有关！！！
     #print(dj)
     return jsonify(note_list=json.loads(dj)["data"],
@@ -57,7 +58,7 @@ def load(tp, idx):
     # print(tp, idx)
     session['type'] = tp
     session['id'] = idx
-    note = Note(NOTEROOT, NOTEINDEXCOLS)
+    note = Note(NOTEROOT)
     note.locate(session['type'], session['id'])
     page = render_template("edit.html"
                           ,title = '笔记页'
@@ -68,15 +69,14 @@ def load(tp, idx):
     
 @app.route('/_get_page')
 def sendPage():
-    note = Note(NOTEROOT, NOTEINDEXCOLS)
+    note = Note(NOTEROOT)
     note.locate(session['type'], session['id']) 
-    note.read()
     # 虽然session不接受dataframe格式，但是可以通过session在函数间共享当前笔记的id和type，然后再locate，模拟数据库的功能
     return send_from_directory(note.path, note.content_name) # 采用这种方法使得本不能加载本地网页的iframe重新可用
 
 @app.route('/_delete')
 def delete():
-    note = Note(NOTEROOT, NOTEINDEXCOLS)
+    note = Note(NOTEROOT)
     note.locate(session['type'], session['id'])
     fname = note.content_name
     note.delete()
@@ -87,7 +87,7 @@ def delete():
 def archive():
     data = request.get_json() # print("保存内容",data)
     #
-    note = Note(NOTEROOT, NOTEINDEXCOLS)
+    note = Note(NOTEROOT)
     note.locate(session['type'], session['id'])
     #
     note.title = data['title']
@@ -99,7 +99,7 @@ def archive():
 @app.route('/_save', methods=["POST"])
 def save():
     data = request.get_json() # 接收js传递来的数据
-    note = Note(NOTEROOT, NOTEINDEXCOLS)
+    note = Note(NOTEROOT)
     note.locate(session['type'], session['id'])
     #
     note.title = data['title']
@@ -112,8 +112,15 @@ def save():
 def update():
     data = request.get_json()
     if data["mode"] in ["all", "new"]:
-        note = Note(NOTEROOT, NOTEINDEXCOLS)
+        note = Note(NOTEROOT)
         note.renewIndex(data["mode"], NEWNOTEDIR)
     else:
         print(f"unknown mode: {data['mode']}")
     return "更新完毕"    
+    
+@app.route('/_att/<string:idx>/<string:file>')
+def sendAtt(idx, file):
+    note = Note(NOTEROOT)
+    note.locate(session['type'], session['id']) 
+    # 虽然session不接受dataframe格式，但是可以通过session在函数间共享当前笔记的id和type，然后再locate，模拟数据库的功能
+    return send_from_directory(note.path+'附件', file) # 采用这种方法使得本不能加载本地网页的iframe重新可用

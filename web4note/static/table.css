@@ -1,15 +1,25 @@
+#note_list_table {
+    width: 600px !Important;
+}
+
 #note_list_table.dataTable tbody td{
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
 }
-#note_list_table.dataTable td:nth-child(1){
-    max-width:60px;
+#note_list_table.dataTable td:nth-child(2){
+    max-width:50vw;
 }
-#note_list_table.dataTable td:nth-child(3){
-    max-width:720px;
+#note_list_table.dataTable td:nth-child(4){
+    max-width:20vw;
+    color: purple;
+}
+#note_list_table.dataTable td:nth-child(5){
+    max-width:10vw;
+}
+#note_list_table.dataTable td:nth-child(6){
+    max-width:10vw;
 }
 #note_list_table.dataTable td:nth-child(7){
-    max-width:200px;
-    color: purple;
+    width:10vw;
 }

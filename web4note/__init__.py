@@ -19,10 +19,10 @@ app.config.from_mapping(
 
     
 if uuid.getnode() == HOME_MAC: 
-    note_dir = "D:/Share/note7web" # home
+    note_dir = "D:/Share/Note4Web" # home
     new_note_dir = "D:/Share/notebook"
 elif uuid.getnode() == WORK_MAC: 
-    note_dir = "E:/Share/Note7Web" # work
+    note_dir = "E:/Share/Note4Web" # work
     new_note_dir = "E:/Share/notebook"
     # note_dir = "E:/Share/test/bb" # work test
     # new_note_dir = "E:/Share/test/aa"
@@ -31,6 +31,6 @@ else:
     print("不是我的电脑：", uuid.getnode())
 NOTEROOT = note_dir
 NEWNOTEDIR = new_note_dir
-TEMPLIST = "./index.json"
+#TEMPLIST = "./index.json"
     
 from web4note import views

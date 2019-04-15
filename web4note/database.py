@@ -10,7 +10,9 @@ import pandas as pd
 from wordcloud import WordCloud
 import jieba
 
-
+NOTEINDEXCOLS= ["type","title","path","ctime","mtime","atime"
+               ,"url","att_list","att_num","keywords"]
+               
 def getDir(dir):
     d = os.path.abspath(dir)
     if not os.path.exists(d):
@@ -28,7 +30,7 @@ class Note():
     self.index_update_time = 索引的更新时间
     
     self.id = id
-    self.ext = 扩展名
+    # self.ext = 扩展名
     self.title = 标题
     self.type = 分类
     self.keywords = 关键词
@@ -38,7 +40,7 @@ class Note():
     self.ctime = ctime create?
     self.mtime = mtime modify
     self.content = 内容本身
-    self.content_name = 内容的文件名 f"{self.title}{self.ext}"
+    self.content_name = 内容的文件名 f"{self.title}.html"
     self.content_path = 内容的保存路径
     
     self.info = info内容本身
@@ -48,9 +50,9 @@ class Note():
     
     """
     
-    def __init__(self, root, cols):
+    def __init__(self, root):
         self.root = root
-        self.index_cols = cols
+        self.index_cols = NOTEINDEXCOLS
         for d in ["Index","Draft","Archive","Trash"]:
             getDir(os.path.join(root, d))
         self.index_path = os.path.join(root, "Index/Note_index.json")
@@ -99,10 +101,10 @@ class Note():
         
     # 内容 ########################        
     def createContent(self):
-        self.contefnt = f"<!DOCTYPE html><html><meta charset='utf-8'><head><title>{self.title}</title></head>"
-        self.content += '<body>文件生成于{datetime.now().strftime("%Y-%m-%d_%H:%M:%S")}，请开始记录吧</body></html>'
+        self.content = f"<!DOCTYPE html><html><meta charset='utf-8'><head><title>{self.title}</title></head>"
+        self.content += f'<body>文件生成于{datetime.now().strftime("%Y-%m-%d_%H:%M:%S")}，请开始记录吧</body></html>'
     
-    def writeContent(self):
+    def writeContent(self):      
         try:
             f = open(self.content_path, "w", encoding="utf-8")
             f.write(self.content)
@@ -110,9 +112,8 @@ class Note():
             print("内容写入出错：", e)
         else:
             f.close()
-    
+        
     def readContent(self):
-        # if self.ext == ".html"
         codecs= ("utf-8", "gb18030", "ASCII")
         i = 0
         for codec in codecs:
@@ -128,53 +129,14 @@ class Note():
                 f.close()
             if i==1:
                 break
-    
-    def parseContent(self, p):
-        [self.title, self.ext] = os.path.splitext(self.content_name)
-        name_s = self.content_name.split("(")[0]
-        if not name_s: # != ""
-            self.title = name_s  # 这个和singleFile保存的文件名格式有关  
-        self.atime = datetime.fromtimestamp(os.path.getatime(p))
-        self.ctime = datetime.fromtimestamp(os.path.getctime(p))  
-        # ctime 在unix和win上表示的意义不全相同，不一定是create time也可能是change time
-        self.mtime = datetime.fromtimestamp(os.path.getmtime(p))     
-        self.url = pathlib.Path(os.path.abspath(self.path)).as_uri()   
-        # 注意目前只对html有进一步的解析        
-        if (self.ext == ".html"):
-            self.readContent()
-            if not self.content:
-                print("未能成功读取HTML文件:", self.content_path)
-            else:
-                soup = BeautifulSoup(self.content, 'lxml')
-                # 摘取标题
-                try:
-                    self.title = soup.find('h2',{"class":"rich_media_title"}).string.strip()
-                except:
-                    pass            
-                # 摘取URL
-                try:
-                    comments = soup.findAll(text=lambda text:isinstance(text, Comment))
-                    url_p = comments[0].split("url:")[1].split("saved date:")[0].strip()
-                except:
-                    pass
-                else:
-                    if url_p[:4] == "http": # 修正部分以前一些本地笔记重新用singleFile保存的链接为file://开头
-                        self.url = url_p
-                # 摘取分类
-                try:
-                    self.keywords = soup.title.string.strip()
-                except:
-                    pass # self.keywords = "未分类"
-                else:
-                    if (self.keywords == self.title) | (self.keywords == None):
-                        self.keywords = "未分类"
-        else: # 对于可能是图片或者pdf格式的各类非html笔记
-            pass
-    
+        if not self.content:
+            print("未能成功读取HTML文件:", self.content_path)
+
     # info ##########################     
     def createInfo(self):
+        self.att_num = len(self.att_list)
         self.info = pd.Series([self.type, self.title, self.path, self.ctime, self.mtime, self.atime\
-                              ,self.url, self.ext, self.keywords]
+                              ,self.url, self.att_list, self.att_num, self.keywords]
                               ,index=self.index_cols)
         
     def writeInfo(self):
@@ -192,17 +154,25 @@ class Note():
         self.url = self.info["url"]
         self.keywords = self.info["keywords"]
 
-    # 附件 #######################     
-    def readAtt(self):
-        self.att_path = os.path.join(self.path, "附件")
+    # 附件 #######################
+    def addAtt(self, p):
         try:
-            al = os.listdir(self.att_path)
+            new_att = shutil.copy(p, os.path.join(self.path, "附件"))
+        except Exception as e:
+            print("附件添加错误：",e)
+        else:
+            self.att_list.append(os.path.basename(new_att))
+    
+    def readAtt(self):
+        att_path = os.path.join(self.path, "附件")
+        try:
+            al = os.listdir(att_path)
         except Exception as e:
             print("读取附件失败：", e)
         else:
             self.att_list = al
+            self.att_num = len(al)
 
-    # addAtt
     # delAtt
     # 
     # 笔记本身 ########################     
@@ -214,33 +184,77 @@ class Note():
             print("千古奇观啊!居然出现了重复的id", self.id)
             self.id = str(uuid.uuid1())
             self.path = os.path.join(self.root, f"{self.type}/{self.id}/")
+        # 新建笔记文件夹
         os.makedirs(self.path) # 用getDir()也可以不过体现不出上边循环的作用了
+        # 新建附件文件夹
+        os.makedirs(os.path.join(self.path, "附件"))
+        self.keywords = "未分类"
+        self.att_list = []
+        #
         if not p: # 生成空白的
             self.title = "欢迎"
             self.ctime = datetime.now()
             self.mtime = datetime.now()
             self.atime = datetime.now()
             self.url = ""
-            self.ext = ".html"
-            self.keywords = ""
-            self.att_list = []
             self.createContent()
-            self.content_name = f"{self.title}{self.ext}"
+            self.content_name = f"{self.title}.html"
             self.content_path = os.path.join(self.path, self.content_name)
             self.writeContent()
-        else: # 由已有文件生成
-            self.content_name = os.path.basename(p) # 
-            self.content_path = shutil.copy2(p, self.path)
-            self.parseContent(self.content_path)
-             # 等效于writeContent函数，另外前序函数已进行isfile判断了
+        else:
+            [self.title, file_ext] = os.path.splitext(os.path.basename(p))
+            self.atime = datetime.fromtimestamp(os.path.getatime(p))
+            self.ctime = datetime.fromtimestamp(os.path.getctime(p))  
+            # ctime 在unix和win上表示的意义不全相同，不一定是create time也可能是change time
+            self.mtime = datetime.fromtimestamp(os.path.getmtime(p))     
+            self.url = pathlib.Path(os.path.abspath(self.path)).as_uri()
+            #
+            if file_ext == ".html":# 开始解析
+                self.parseHTML(p)
+            else: # 对于可能是图片或者pdf格式的各类非html笔记
+                self.createContent()
+                self.content_name = f"{self.title}.html"
+                self.content_path = os.path.join(self.path, self.content_name)
+                self.writeContent()
+                self.addAtt(p)
         # 新建info文件
         self.writeInfo()
-        # 新建附件文件夹
-        os.makedirs(os.path.join(self.path, "附件")) 
         # 新建或更新索引表，意味着索引表就算更新错了，但文件本身不出错就行
         self.index.loc[self.id] = self.info
         #self.writeIndex()  否则后边更新新增时会反复读写      
     
+    def parseHTML(self,p):
+        self.content_name = os.path.basename(p)
+        self.content_path = shutil.copy2(p, self.path) # 解析与追加同时进行
+        name_s = self.content_name.split("(")[0]
+        if not name_s: # != ""
+            self.title = name_s  # 这个和singleFile保存的文件名格式有关     
+        self.readContent()
+        # 开始爬取
+        soup = BeautifulSoup(self.content, 'lxml')
+        # 摘取标题
+        try:
+            self.title = soup.find('h2',{"class":"rich_media_title"}).string.strip()
+        except:
+            pass            
+        # 摘取URL
+        try:
+            comments = soup.findAll(text=lambda text:isinstance(text, Comment))
+            url_p = comments[0].split("url:")[1].split("saved date:")[0].strip()
+        except:
+            pass
+        else:
+            if url_p[:4] == "http": # 修正部分以前一些本地笔记重新用singleFile保存的链接为file://开头
+                self.url = url_p
+        # 摘取分类
+        try:
+            self.keywords = soup.title.string.strip()
+        except:
+            pass # self.keywords = "未分类"
+        else:
+            if (self.keywords == self.title) | (self.keywords == None):
+                self.keywords = "未分类" 
+            
     def locate(self, tp, idx):
         self.id = idx
         self.type = tp
@@ -258,13 +272,9 @@ class Note():
             self.writeIndex()
      
     def update(self, mode):
-        if self.ext == ".html":
-            send2trash(os.path.abspath(self.content_path))
-            self.content_name = f"{self.title}{self.ext}"
-            self.content_path = os.path.join(self.path, self.content_name)
-            self.writeContent()
+        old_content_name = self.content_name    
         send2trash(os.path.abspath(self.info_path))
-        self.writeInfo()
+        # 再移
         if mode=="Archive":    
             if self.type == 'Archive':
                 print(f"已经是存档文件: {self.id} {self.title}")
@@ -275,6 +285,13 @@ class Note():
                 shutil.move(oldpath, self.path)
         else: # "save"    
             pass
+        # 最后改
+        self.content_name = f"{self.title}.html"
+        self.content_path = os.path.join(self.path, self.content_name)
+        send2trash(os.path.abspath(os.path.join(self.path, old_content_name)))
+        self.writeContent()
+        self.writeInfo()
+        # 修改index
         self.index.loc[self.id] = self.info
         self.writeIndex()
         
@@ -289,26 +306,26 @@ class Note():
             for f in fl:    
                 path = os.path.join(self.path, f)
                 if os.path.isfile(path):
-                    if os.path.splitext(f)[1] != ".info":
+                    if os.path.splitext(f)[1] == ".html":
                         content_exist = 1
                         self.content_path = path
                         self.content_name = os.path.basename(path)
-                        self.ext = os.path.splitext(f)[1]
                         self.atime = datetime.fromtimestamp(os.path.getatime(self.content_path))
                         self.ctime = datetime.fromtimestamp(os.path.getctime(self.content_path))  # ctime 在unix和win上表示的意义不全相同，不一定是create time也可能是change time
                         self.mtime = datetime.fromtimestamp(os.path.getmtime(self.content_path))
-                    else:  # read json
+                    elif os.path.splitext(f)[1] == ".info":  # read json
                         info_exist = 1
                         self.info_path = path
                         self.readInfo() # 以后也可以设计先查info，如有问题则重新parse
+                    else:
+                        print(f"{f}混入了{self.path}")
                 else: # read attachment
                     self.readAtt()
-            if info_exist == 0: # ！！！这里的鲁棒性不一定很好，后续还可以再想想优化一下！！！
-                print(f"读取{self.path}的info出错")
-                if content_exist == 1:
-                    self.parseContent(self.content_path) # 读取content作为补救
-                else:
-                    print(f"读取{self.path}的内容也出错")
+            if info_exist == 0: 
+                print(f"未成功读取{self.path}的info")
+            if content_exist == 0:
+                print(f"未成功读取{self.path}的content")
+                
    #############################################################################         
 
     # 重新或追加索引
@@ -357,10 +374,11 @@ class Note():
                     self.index.loc[self.id] = self.info # 信息加入index
                     count += 1
                 else: # 疑似已经加入笔记库的了
-                    print(f"疑似旧笔记：{nn} 暂未存入笔记库中")
-                    # self.create(p)
-                    # self.index.loc[self.id] = self.info # 信息加入index
-                    # count += 1
+                    # print(f"疑似旧笔记：{nn} 暂未存入笔记库中")
+                    self.create(p)
+                    shutil.move(p, done_dir)
+                    self.index.loc[self.id] = self.info # 信息加入index
+                    count += 1
                 if count % 10 == 0:
                     print(f"已加入{count}条笔记")
                 else:

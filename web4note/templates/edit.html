@@ -54,11 +54,21 @@
                     </div>
                     <input type="text" class="form-control" id="note-title" aria-describedby="basic-addon3" value="{{ noteinfo['title'] }}">
                 </div>
-                <div class="input-group mb-0">
-                    <div class="input-group-prepend">
-                        <span class="input-group-text" id="basic-addon3">分类：</span>
+                <div class="row">
+                    <div class="col-sm">
+                        <div class="input-group mb-0">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="basic-addon3">分类：</span>
+                            </div>
+                            <input type="text" class="form-control" id="note-keywords" aria-describedby="basic-addon3" value="{{ noteinfo['keywords'] }}">
+                        </div>
                     </div>
-                    <input type="text" class="form-control" id="note-keywords" aria-describedby="basic-addon3" value="{{ noteinfo['keywords'] }}">
+                    <div class="col-sm-auto text-nowrap">
+                        <span class="badge badge-light m-1">
+                            <!--a href=" {{ 'file:///'+noteinfo['path']+'附件/'+noteinfo['att_list'][0] }}">{{ noteinfo['att_list'] }}</a-->
+                             <a href=" {{ url_for('sendAtt', idx=noteinfo['id'], file=noteinfo['att_list'][0]) }}">{{ noteinfo['att_list'] }}</a>
+                        </span>
+                    </div>
                 </div>
             </div>
             <div class="WYSIWYG-buttons-container">
