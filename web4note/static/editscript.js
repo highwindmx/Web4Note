@@ -30,6 +30,29 @@ $(document).ready(function () {
             }
         });
     });
+    // 删除用的脚本
+    $('#dele-btn').click(function() {
+        var note_t = document.getElementById("note-title").value;
+        var note_k = document.getElementById("note-keywords").value;
+        var note_c = frames["wysiwyg"].document.documentElement.outerHTML;
+        var data = {};
+        data['content'] = note_c
+        data['title'] = note_t
+        data['keywords'] = note_k
+        $.ajax({
+            type: 'POST',
+            url: "/_delete",
+            data: JSON.stringify(data),
+            dataType: 'json', // 注意：这里是指希望服务端返回json格式的数据
+            contentType:'application/json; charset=utf-8',
+            success: function(data) { 
+                //console.log("cool", data)
+            },
+            error: function(xhr, type) {
+                //console.log("notcool", data)
+            }
+        });
+    });
     // 保存用的脚本 
     $('#save-btn').click(function() {
         var note_t = document.getElementById("note-title").value;

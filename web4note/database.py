@@ -170,8 +170,11 @@ class Note():
         except Exception as e:
             print("读取附件失败：", e)
         else:
-            self.att_list = al
             self.att_num = len(al)
+            if self.att_num == 0:
+                self.att_list = []
+            else:
+                self.att_list = al
 
     # delAtt
     # 
@@ -270,6 +273,7 @@ class Note():
         else: 
             self.index = self.index.drop(self.id)
             self.writeIndex()
+            print(f"笔记{self.id}删除成功")
      
     def update(self, mode):
         old_content_name = self.content_name    

@@ -74,7 +74,7 @@ def sendPage():
     # 虽然session不接受dataframe格式，但是可以通过session在函数间共享当前笔记的id和type，然后再locate，模拟数据库的功能
     return send_from_directory(note.path, note.content_name) # 采用这种方法使得本不能加载本地网页的iframe重新可用
 
-@app.route('/_delete')
+@app.route('/_delete', methods=["POST"])
 def delete():
     note = Note(NOTEROOT)
     note.locate(session['type'], session['id'])
