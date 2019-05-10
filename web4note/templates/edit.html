@@ -37,6 +37,9 @@
                         <li class="nav-item m-1">
                             <button class="btn btn-secondary text-nowrap" id="dele-btn"><i class="fa fa-trash"></i>删除</button>
                         </li>
+                        <!--li class="nav-item m-1">
+                            <button class="btn btn-secondary text-nowrap" id="btnShow"><i class="fa fa-trash"></i>测试</button>
+                        </li-->                        
                         <li class="nav-item m-1">
                             <a class="nav-link text-nowrap" href="#">修改时间：{{ noteinfo['ctime'] }}</a>
                         </li>
@@ -46,6 +49,10 @@
                     </ul>
                 </div>
             </nav>
+            <div id="note-del-alt" class="alert alert-warning collapse" role="alert">
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                笔记已成功删除
+            </div>
             <div class="info-module">
             <!--信息栏-->
                 <div class="input-group mb-0">
@@ -90,7 +97,12 @@
 
             <!--不要随便给iframe加div不然脚本在DOM里会找不到这个组件--> 
             <iframe class="WYSIWYG-note" name="wysiwyg" src={{ source }}></iframe> 
-            <!--iframe class="WYSIWYG-note" name="wysiwyg" src={{ url_for("static", filename=source) }}></iframe-->         
+            <!--iframe class="WYSIWYG-note" name="wysiwyg" src={{ url_for("static", filename=source) }}></iframe-->     
+            <!--script>
+            $("#btnShow").click(function(){
+                $("#hhh").slideDown();
+            });
+            </script-->            
         </div> 
     </body>
 </html>

@@ -52,6 +52,7 @@ $(document).ready(function () {
                 //console.log("notcool", data)
             }
         });
+        $("#note-del-alt").slideDown(); //顶部浮动提示
     });
     // 保存用的脚本 
     $('#save-btn').click(function() {
@@ -94,5 +95,4 @@ $(document).ready(function () {
             });           
         };
     });
-    
 });    
