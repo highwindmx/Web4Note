@@ -134,7 +134,7 @@ class Note():
 
     # info ##########################     
     def createInfo(self):
-        self.att_num = len(self.att_list)
+        self.readAtt()
         self.info = pd.Series([self.type, self.title, self.path, self.ctime, self.mtime, self.atime\
                               ,self.url, self.att_list, self.att_num, self.keywords]
                               ,index=self.index_cols)
@@ -162,6 +162,7 @@ class Note():
             print("附件添加错误：",e)
         else:
             self.att_list.append(os.path.basename(new_att))
+            self.att_num = len(self.att_list)
     
     def readAtt(self):
         att_path = os.path.join(self.path, "附件")
@@ -171,8 +172,9 @@ class Note():
             print("读取附件失败：", e)
         else:
             self.att_num = len(al)
+            # self.att_list = al
             if self.att_num == 0:
-                self.att_list = []
+                self.att_list = [""]
             else:
                 self.att_list = al
 

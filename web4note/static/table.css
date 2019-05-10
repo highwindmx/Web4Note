@@ -8,17 +8,19 @@
     white-space: nowrap;
 }
 #note_list_table.dataTable td:nth-child(2){
+    min-width:50vw;
     max-width:50vw;
 }
 #note_list_table.dataTable td:nth-child(4){
-    max-width:20vw;
-    color: purple;
+    min-width:15vw;
+    max-width:15vw;
+    color:purple;
 }
 #note_list_table.dataTable td:nth-child(5){
-    max-width:10vw;
+    width:15vw;
 }
 #note_list_table.dataTable td:nth-child(6){
-    max-width:10vw;
+    width:10vw;
 }
 #note_list_table.dataTable td:nth-child(7){
     width:10vw;

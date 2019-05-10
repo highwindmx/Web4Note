@@ -43,7 +43,7 @@ def getTable():
     df['title'] = "<a href='load/"+ df['type'] + "/" + df.index + "'>" + df['title'] + "</a>"    # 改造title使之超链接化 
     df['atime'] = df['atime'].apply(lambda x: x.strftime('%Y-%m-%d')) # 日期格式化
     df['ctime'] = df['ctime'].apply(lambda x: x.strftime('%Y-%m-%d'))
-    df['mtime'] = df['mtime'].apply(lambda x: x.strftime('%Y-%m-%d'))
+    df['mtime'] = df['mtime'].apply(lambda x: x.strftime('%Y-%m-%d %H:%M:%S'))
     #df['att'] = df['att_list']
     df = df[['type','title','att_num','keywords','mtime','atime','ctime']] 
     df.columns = ['Type', '标题', '附', '关键词', 'mtime', 'atime', 'ctime']

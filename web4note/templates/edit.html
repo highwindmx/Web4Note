@@ -65,7 +65,7 @@
                     </div>
                     <div class="col-sm-auto text-nowrap">
                         <span class="badge badge-light m-1">
-                            <!--a href=" {{ 'file:///'+noteinfo['path']+'附件/'+noteinfo['att_list'][0] }}">{{ noteinfo['att_list'] }}</a-->
+                            <!--a href=" {{ 'file:///'+noteinfo['path']+'附件/'+noteinfo['att_list'][0] }}">{{ noteinfo['att_list'][0] }}</a-->
                              <a href=" {{ url_for('sendAtt', idx=noteinfo['id'], file=noteinfo['att_list'][0]) }}">{{ noteinfo['att_list'] }}</a>
                         </span>
                     </div>

@@ -12,7 +12,7 @@ $(document).ready(function () { //用这种办法可以避免第一次执行要�
             table = $("#note_list_table").DataTable({
                 data: data.note_list,
                 columns: data.columns,
-                "lengthMenu": [[15, 30, 60, -1], [15, 30, 60, "All"]],
+                "lengthMenu": [[13, 30, 60, -1], [13, 30, 60, "All"]],
                 //columnDefs: [
                 //// the target for this configuration, 0 it's the first column
                 //    { targets: 6, render: $.fn.dataTable.render.ellipsis(10) }
