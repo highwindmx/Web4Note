@@ -29,6 +29,7 @@ $(document).ready(function () {
                 //console.log("notcool", data)
             }
         });
+        $("#note-arc-alt").slideDown(); //顶部浮动提示
     });
     // 删除用的脚本
     $('#dele-btn').click(function() {
