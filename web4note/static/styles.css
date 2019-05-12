@@ -1,8 +1,8 @@
 /*html, body { height: 100% } */
 
-#note-del-alt #note-arc-alt{
+#note-del-alt, #note-arc-alt{
     display:none; /*先不显示*/
-    z-index:9999; /*浮动在前*/
+    z-index:99999; /*浮动在前*/
 }
 button{
     cursor:pointer;
