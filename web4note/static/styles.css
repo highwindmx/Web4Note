@@ -13,6 +13,9 @@ button{
 #bold-btn{
     font-weight:bold;
 }
+#undl-btn{
+    text-decoration: underline;
+}
 #fred-btn{
     color:red;
 }
@@ -30,7 +33,6 @@ button{
     flex-grow:1;
 }
 
-
 .navbar{
     grid-area:navb;
 }
@@ -46,17 +48,22 @@ button{
     grid-area:frame;
     width: 100%; 
     height: 100%;
-    overflow: hidden;
+    /*overflow: hidden;*/
 }
+/*.WYSIWYG-edit{
+    grid-area:edit;
+}*/
 .main-container{
-    width: 100vw;
+    width: 99vw;
     height: 100vh;
     display:grid;
     grid-template-columns: auto;
-    grid-template-rows: 64px 72px 32px auto; /* 64和72都是与预制导航栏和输入框内定的，不要改 */
+    grid-template-rows: 64px 76px 32px auto; /* 64和72都是与预制导航栏和输入框内定的，不要改 */
+    /*grid-template-rows: auto 12% auto;*/
     grid-template-areas:
         "navb"
         "info"
+        /*"edit";*/
         "btns"
         "frame";
 }

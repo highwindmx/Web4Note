@@ -82,31 +82,33 @@
                     </div>
                 </div>
             </div>
-            <div class="WYSIWYG-buttons-container">
-            <!--笔记修饰按钮栏-->    
-                <button class="WYSIWYG-button btn btn-light" id="view-btn"><i class="fa fa-eye"></i>阅览</button>                                 
-                <button class="WYSIWYG-button btn btn-light" id="edit-btn"><i class="fa fa-pencil"></i>编辑</button>           
-                <button class="WYSIWYG-button btn btn-light" id="bold-btn" data-name="bold">加粗</button>
-                <button class="WYSIWYG-button btn btn-light" id="fred-btn" data-name="forecolor" data-value="red">变红</button>
-                <button class="WYSIWYG-button btn btn-light" id="bblue-btn" data-name="backcolor" data-value="#00d4ff">高亮蓝</button>
-                <button class="WYSIWYG-button btn btn-light" id="byllw-btn" data-name="backcolor" data-value="#faff00">高亮黄</button>
-                <button class="WYSIWYG-button btn btn-light" id="numli-btn" data-name="insertorderedlist">1.数列</button>
-                <button class="WYSIWYG-button btn btn-light" id="dotli-btn" data-name="insertunorderedlist">● 点列</button>
-                <button class="WYSIWYG-button btn btn-light" id="dotli-btn" data-name="Indent"><i class="fa fa-indent"></i>增加缩进</button>
-                <button class="WYSIWYG-button btn btn-light" id="dotli-btn" data-name="Outdent"><i class="fa fa-outdent"></i>减少缩进</button>
-                <button class="WYSIWYG-button btn btn-light" id="rmfmt-btn" data-name="removeFormat"><i class="fa fa-times"></i>清除格式</button>
-                
-            </div>
-            <!--附件将以拖拽形式呈现，暂时还未实现-->
+            <!--div class="WYSIWYG-edit"-->
+                <div class="WYSIWYG-buttons-container">
+                <!--笔记修饰按钮栏-->    
+                    <button class="WYSIWYG-button btn btn-light" id="view-btn"><i class="fa fa-eye"></i>阅览</button>                                 
+                    <button class="WYSIWYG-button btn btn-light" id="edit-btn"><i class="fa fa-pencil"></i>编辑</button>           
+                    <button class="WYSIWYG-button btn btn-light" id="bold-btn" data-name="bold">加粗</button>
+                    <button class="WYSIWYG-button btn btn-light" id="undl-btn" data-name="underline">下划线</button>
+                    <button class="WYSIWYG-button btn btn-light" id="fred-btn" data-name="forecolor" data-value="red">变红</button>
+                    <button class="WYSIWYG-button btn btn-light" id="bblue-btn" data-name="backcolor" data-value="#00d4ff">高亮蓝</button>
+                    <button class="WYSIWYG-button btn btn-light" id="byllw-btn" data-name="backcolor" data-value="#faff00">高亮黄</button>
+                    <button class="WYSIWYG-button btn btn-light" id="numli-btn" data-name="insertorderedlist">1.数列</button>
+                    <button class="WYSIWYG-button btn btn-light" id="dotli-btn" data-name="insertunorderedlist">● 点列</button>
+                    <button class="WYSIWYG-button btn btn-light" id="dotli-btn" data-name="Indent"><i class="fa fa-indent"></i>增加缩进</button>
+                    <button class="WYSIWYG-button btn btn-light" id="dotli-btn" data-name="Outdent"><i class="fa fa-outdent"></i>减少缩进</button>
+                    <button class="WYSIWYG-button btn btn-light" id="rmfmt-btn" data-name="removeFormat"><i class="fa fa-times"></i>清除格式</button>
+                </div>
+                <!--附件将以拖拽形式呈现，暂时还未实现-->
 
-            <!--不要随便给iframe加div不然脚本在DOM里会找不到这个组件--> 
-            <iframe class="WYSIWYG-note" name="wysiwyg" src={{ source }}></iframe> 
-            <!--iframe class="WYSIWYG-note" name="wysiwyg" src={{ url_for("static", filename=source) }}></iframe-->     
-            <!--script>
-            $("#btnShow").click(function(){
-                $("#hhh").slideDown();
-            });
-            </script-->            
+                <!--不要随便给iframe加div不然脚本在DOM里会找不到这个组件--> 
+                <iframe class="WYSIWYG-note" name="wysiwyg" src={{ source }}></iframe> 
+                <!--iframe class="WYSIWYG-note" name="wysiwyg" src={{ url_for("static", filename=source) }}></iframe-->     
+                <!--script>
+                $("#btnShow").click(function(){
+                    $("#hhh").slideDown();
+                });
+                </script-->
+            <!--/div-->            
         </div> 
     </body>
 </html>
