@@ -7,6 +7,7 @@ from send2trash import send2trash
 from bs4 import (BeautifulSoup, Comment)
 import lxml # 不一定用，但与bs4解析网页时相关模块有联系，作为模块预装的提示吧
 import pandas as pd
+import re
 from wordcloud import WordCloud
 import jieba
 
@@ -69,12 +70,14 @@ class Note():
     def writeIndex(self):
         try:
             self.index.to_json(self.index_path, orient='split') #可以保持读取json内容的顺序
+            #self.index.to_json(self.index_path)
         except Exception as e:
             print("索引表保存出错：", e)
             
     def readIndex(self):
         try:
             self.index = pd.read_json(self.index_path, convert_dates=["atime","ctime","mtime"], orient='split')
+            #self.index = pd.read_json(self.index_path, convert_dates=["atime","ctime","mtime"])
         except Exception as e:
             print("索引表读取出错：", e)
     
@@ -110,6 +113,7 @@ class Note():
             f.write(self.content)
         except Exception as e:
             print("内容写入出错：", e)
+            f.close()
         else:
             f.close()
         
@@ -292,6 +296,8 @@ class Note():
         else: # "save"    
             pass
         # 最后改
+        self.title = re.sub('[\/:*?"<>|]','',self.title) 
+        #防止路径错误无法正确保存
         self.content_name = f"{self.title}.html"
         self.content_path = os.path.join(self.path, self.content_name)
         send2trash(os.path.abspath(os.path.join(self.path, old_content_name)))
@@ -441,8 +447,3 @@ class Note():
             print("词云生成错误：",e)
         else:
             wc.to_file("./web4note/static/images/wordcloud.png") 
-    
-    
-    
-
-
