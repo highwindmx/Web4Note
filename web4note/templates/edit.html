@@ -41,7 +41,7 @@
                             <button class="btn btn-secondary text-nowrap" id="btnShow"><i class="fa fa-trash"></i>测试</button>
                         </li-->                        
                         <li class="nav-item m-1">
-                            <a class="nav-link text-nowrap" href="#">修改时间：{{ noteinfo['ctime'] }}</a>
+                            <a class="nav-link text-nowrap" href="#">修改时间：{{ noteinfo['mtime'] }}</a>
                         </li>
                         <li class="nav-item m-1">
                             <a class="nav-link text-nowrap" id="outlink" href="{{ noteinfo['url'] }}">外链：{{ noteinfo['url'] }}</a>
@@ -89,6 +89,10 @@
                     <button class="WYSIWYG-button btn btn-light" id="edit-btn"><i class="fa fa-pencil"></i>编辑</button>           
                     <button class="WYSIWYG-button btn btn-light" id="bold-btn" data-name="bold">加粗</button>
                     <button class="WYSIWYG-button btn btn-light" id="undl-btn" data-name="underline">下划线</button>
+                    <button class="WYSIWYG-button btn btn-light" id="ftsz-btn" data-name="fontSize" data-value="1px">缩字体</button>
+                    <button class="WYSIWYG-button btn btn-light" id="juce-btn" data-name="JustifyLeft"><i class="fa fa-align-left"></i></button>
+                    <button class="WYSIWYG-button btn btn-light" id="juce-btn" data-name="JustifyCenter"><i class="fa fa-align-center"></i></button>
+                    <button class="WYSIWYG-button btn btn-light" id="juce-btn" data-name="JustifyRight"><i class="fa fa-align-right"></i></button>
                     <button class="WYSIWYG-button btn btn-light" id="fred-btn" data-name="forecolor" data-value="red">变红</button>
                     <button class="WYSIWYG-button btn btn-light" id="bblue-btn" data-name="backcolor" data-value="#00d4ff">高亮蓝</button>
                     <button class="WYSIWYG-button btn btn-light" id="byllw-btn" data-name="backcolor" data-value="#faff00">高亮黄</button>
@@ -96,6 +100,15 @@
                     <button class="WYSIWYG-button btn btn-light" id="dotli-btn" data-name="insertunorderedlist">● 点列</button>
                     <button class="WYSIWYG-button btn btn-light" id="dotli-btn" data-name="Indent"><i class="fa fa-indent"></i>增加缩进</button>
                     <button class="WYSIWYG-button btn btn-light" id="dotli-btn" data-name="Outdent"><i class="fa fa-outdent"></i>减少缩进</button>
+                    <button class="WYSIWYG-button btn btn-light" id="table-btn" data-name="insertHTML" data-value="
+                        <table style='border: solid 1px;'>
+                            <tbody>
+                                <tr>
+                                    <td>请粘贴表格</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    "><i class="fa fa-table"></i>插入表格</button>
                     <button class="WYSIWYG-button btn btn-light" id="rmfmt-btn" data-name="removeFormat"><i class="fa fa-times"></i>清除格式</button>
                 </div>
                 <!--附件将以拖拽形式呈现，暂时还未实现-->
