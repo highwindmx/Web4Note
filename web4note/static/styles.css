@@ -36,6 +36,11 @@ button{
 .navbar{
     grid-area:navb;
 }
+#outlink{
+    width:320px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
 .info-module{
     grid-area:info;
 }
