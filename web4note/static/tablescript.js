@@ -12,7 +12,7 @@ $(document).ready(function () { //用这种办法可以避免第一次执行要�
             table1 = $("#note_list_table").DataTable({
                 data: data.note_list,
                 columns: data.columns,
-                "lengthMenu": [[13, 30, 60, -1], [13, 30, 60, "All"]],
+                "lengthMenu": [[12, 50, 100, -1], [12, 50, 100, "All"]],
                 "order": [[ 4, "asc" ]], //https://www.datatables.net/examples/basic_init/table_sorting.html
                 //columnDefs: [
                 //// the target for this configuration, 0 it's the first column
@@ -39,7 +39,7 @@ $(document).ready(function () { //用这种办法可以避免第一次执行要�
             table2 = $("#note_dup_table.display").DataTable({
                 data: data.note_dup_list,
                 columns: data.columns,
-                "lengthMenu": [[13, 30, 60, -1], [13, 30, 60, "All"]],
+                "lengthMenu": [[12, 50, 100, -1], [12, 50, 100, "All"]],
                 "order": [[ 1, "asc" ]],
             });
         }
