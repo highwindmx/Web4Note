@@ -53,6 +53,26 @@ def getTable():
     return jsonify(note_list=json.loads(dj)["data"],
                    columns=[{"title": str(col)} for col in json.loads(dj)["columns"]])
 
+@app.route('/_get_dup_table')
+def getDupTable():
+    note = Note(NOTEROOT)
+    note.readIndex()
+    # 导入并规整加载到表格里的数据格式
+    df = note.index
+    ddf = df.loc[df.duplicated(subset=['title'], keep=False)].copy() #进行查重
+    ddf['title'] = "<a href='load/"+ ddf['type'] + "/" + ddf.index + "'>" + ddf['title'] + "</a>"    # 改造title使之超链接化 
+    ddf['atime'] = ddf['atime'].apply(lambda x: x.strftime('%Y-%m-%d')) # 日期格式化
+    ddf['ctime'] = ddf['ctime'].apply(lambda x: x.strftime('%Y-%m-%d'))
+    ddf['mtime'] = ddf['mtime'].apply(lambda x: x.strftime('%Y-%m-%d %H:%M:%S'))
+    #df['att'] = df['att_list']
+    ddf = ddf[['type','title','att_num','keywords','mtime','atime','ctime']] 
+    ddf.columns = ['Type', '标题', '附', '关键词', 'mtime', 'atime', 'ctime']
+    # 忽略path url，同时调整顺序
+    dj = ddf.to_json(orient="split") # orient="split" 可能和后边的json.loads有关！！！
+    #print(dj)
+    return jsonify(note_dup_list=json.loads(dj)["data"],
+                   columns=[{"title": str(col)} for col in json.loads(dj)["columns"]])
+
 @app.route('/load/<string:tp>/<string:idx>')
 def load(tp, idx):
     # print(tp, idx)

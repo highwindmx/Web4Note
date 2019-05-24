@@ -42,7 +42,7 @@
             <div class="nav nav-tabs " id="nav-tab" role="tablist">
                 <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-home" aria-selected="true"><i class="fa fa-list-alt"></i>笔记列表</a>
                 <a class="nav-item nav-link" id="nav-wordcloud-tab" data-toggle="tab" href="#nav-wordcloud" role="tab" aria-controls="nav-wordcloud" aria-selected="false"><i class="fa fa-cloud"></i>统计词云</a>
-                <a class="nav-item nav-link" id="nav-search-tab" data-toggle="tab" href="#nav-search" role="tab" aria-controls="nav-search" aria-selected="false"><i class="fa fa-search"></i>复杂检索</a>
+                <a class="nav-item nav-link" id="nav-search-tab" data-toggle="tab" href="#nav-search" role="tab" aria-controls="nav-search" aria-selected="false"><i class="fa fa-search"></i>重复检索</a>
                 <a class="nav-item nav-link" id="nav-calendar-tab" data-toggle="tab" href="#nav-calendar" role="tab" aria-controls="nav-calendar" aria-selected="false"><i class="fa fa-calendar-check-o"></i>日历</a>
             </div>
         </nav>
@@ -83,6 +83,7 @@
                  <!--！！！词云图片-->
                 <img src={{ url_for('static', filename='images/wordcloud.png') }} width="600px" height="300px">
             </div>
+            
             <div class="tab-pane fade" id="nav-search" role="tabpanel" aria-labelledby="nav-search-tab">
             <!--所谓高级检索，！！！还未完成！！！-->
                 <div class="search-module">
@@ -97,11 +98,14 @@
                         <i class="fa fa-search"></i>检索
                     </button> 
                 </div> 
+                <div class="table">
+                    <table class="table striped compact display" id="note_dup_table"></table>
+                </div>
             </div>
 
             <div class="tab-pane fade" id="nav-calendar" role="tabpanel" aria-labelledby="nav-calendar-tab">
             <!--！！！日历功能未完成-->
-                <button class="btn btn-secondary" id="calendar"   onclick="showCalender()">日历</button>
+                <button class="btn btn-secondary" id="calendar" onclick="showCalender()">日历</button>
                 哥们儿你太帅了！
             </div>
         </div>

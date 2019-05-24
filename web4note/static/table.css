@@ -1,7 +1,6 @@
 #note_list_table {
     width: 600px !Important;
 }
-
 #note_list_table.dataTable tbody td{
     overflow: hidden;
     text-overflow: ellipsis;
@@ -23,5 +22,33 @@
     width:10vw;
 }
 #note_list_table.dataTable td:nth-child(7){
+    width:10vw;
+}
+
+div.dataTables_wrapper {
+        margin-bottom: 3em;
+    }
+
+#note_dup_table.dataTable tbody tr td{
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+#note_dup_table.dataTable td:nth-child(2){
+    min-width:50vw;
+    max-width:50vw;
+}
+#note_dup_table.dataTable td:nth-child(4){
+    min-width:15vw;
+    max-width:15vw;
+    color:purple;
+}
+#note_dup_table.dataTable td:nth-child(5){
+    width:15vw;
+}
+#note_dup_table.dataTable td:nth-child(6){
+    width:10vw;
+}
+#note_dup_table.dataTable td:nth-child(7){
     width:10vw;
 }

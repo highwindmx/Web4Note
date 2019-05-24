@@ -13,6 +13,7 @@ $(document).ready(function () { //用这种办法可以避免第一次执行要�
                 data: data.note_list,
                 columns: data.columns,
                 "lengthMenu": [[13, 30, 60, -1], [13, 30, 60, "All"]],
+                "order": [[ 4, "asc" ]], //https://www.datatables.net/examples/basic_init/table_sorting.html
                 //columnDefs: [
                 //// the target for this configuration, 0 it's the first column
                 //    { targets: 6, render: $.fn.dataTable.render.ellipsis(10) }
@@ -26,7 +27,23 @@ $(document).ready(function () { //用这种办法可以避免第一次执行要�
             });
         }
     );    
-                       
+    
+    $.getJSON('/_get_dup_table', 
+        function(data) {
+            //console.log(data.columns);
+            if (table !== null) {
+                table.destroy();
+                table = null;
+                $("#note_dup_table").empty();
+            }
+            table = $("#note_dup_table.display").DataTable({
+                data: data.note_dup_list,
+                columns: data.columns,
+                "lengthMenu": [[15, 30, 60, -1], [15, 30, 60, "All"]],
+            });
+        }
+    );
+    
     // 更新全部用的脚本
     $('#update-all').click(function() {
         var data = {};
