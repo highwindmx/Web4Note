@@ -279,7 +279,7 @@ class Note():
         else: 
             self.index = self.index.drop(self.id)
             self.writeIndex()
-            print(f"笔记{self.id}删除成功")
+            print(f"删除成功：笔记{self.id}")
      
     def update(self, mode):
         old_content_name = self.content_name    
