@@ -1,15 +1,15 @@
 $(document).ready(function () { //用这种办法可以避免第一次执行要点两次的问题
     //加载表格的脚本
-    var table = null;
+    var table1 = null;
     $.getJSON('/_get_table', 
         function(data) {
             //console.log(data.columns);
-            if (table !== null) {
-                table.destroy();
-                table = null;
+            if (table1 !== null) {
+                table1.destroy();
+                table1 = null;
                 $("#note_list_table").empty();
             }
-            table = $("#note_list_table").DataTable({
+            table1 = $("#note_list_table").DataTable({
                 data: data.note_list,
                 columns: data.columns,
                 "lengthMenu": [[13, 30, 60, -1], [13, 30, 60, "All"]],
@@ -27,19 +27,20 @@ $(document).ready(function () { //用这种办法可以避免第一次执行要�
             });
         }
     );    
-    
+    var table2 = null;
     $.getJSON('/_get_dup_table', 
         function(data) {
             //console.log(data.columns);
-            if (table !== null) {
-                table.destroy();
-                table = null;
+            if (table2 !== null) {
+                table2.destroy();
+                table2 = null;
                 $("#note_dup_table").empty();
             }
-            table = $("#note_dup_table.display").DataTable({
+            table2 = $("#note_dup_table.display").DataTable({
                 data: data.note_dup_list,
                 columns: data.columns,
-                "lengthMenu": [[15, 30, 60, -1], [15, 30, 60, "All"]],
+                "lengthMenu": [[13, 30, 60, -1], [13, 30, 60, "All"]],
+                "order": [[ 1, "asc" ]],
             });
         }
     );
