@@ -75,17 +75,21 @@ def getDupTable():
 
 @app.route('/load/<string:tp>/<string:idx>')
 def load(tp, idx):
-    # print(tp, idx)
-    session['type'] = tp
-    session['id'] = idx
-    note = Note(NOTEROOT)
-    note.locate(session['type'], session['id'])
-    page = render_template("edit.html"
-                          ,title = '笔记页'
-                          ,noteinfo = note
-                          ,source= url_for('sendPage')  # 采用这种方法使得本不能加载本地网页的iframe重新可用
-                          )
-    return page
+    try:
+        # print(tp, idx)
+        session['type'] = tp
+        session['id'] = idx
+        note = Note(NOTEROOT)
+        note.locate(session['type'], session['id'])
+        page = render_template("edit.html"
+                              ,title = '笔记页'
+                              ,noteinfo = note
+                              ,source= url_for('sendPage')  # 采用这种方法使得本不能加载本地网页的iframe重新可用
+                              )
+    except Exception as e:
+        return f"读取笔记 {session['id']} 错误：丢失或已删除"
+    else:
+        return page
     
 @app.route('/_get_page')
 def sendPage():
