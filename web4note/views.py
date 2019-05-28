@@ -79,6 +79,7 @@ def load(tp, idx):
         # print(tp, idx)
         session['type'] = tp
         session['id'] = idx
+        print(f"正在操作{session['id']}")
         note = Note(NOTEROOT)
         note.locate(session['type'], session['id'])
         page = render_template("edit.html"
@@ -103,6 +104,7 @@ def delete():
     note = Note(NOTEROOT)
     '''这里似乎可以加一个从当前页面爬取id然后和session['id']比较的过程，防止页面多开误删除的问题！！！
     或者干脆只是根据爬取的id进行删除，其他archive, update同此！！！'''
+    print(f"正在操作{session['id']}")
     note.locate(session['type'], session['id']) #其实locate和type没有什么大的关系吧？？？
     #fname = note.content_name
     note.delete()
@@ -115,6 +117,7 @@ def archive():
     data = request.get_json() # print("保存内容",data)
     #
     note = Note(NOTEROOT)
+    print(f"正在操作{session['id']}")
     note.locate(session['type'], session['id'])
     #
     note.title = data['title']
@@ -127,6 +130,7 @@ def archive():
 def save():
     data = request.get_json() # 接收js传递来的数据
     note = Note(NOTEROOT)
+    print(f"正在操作{session['id']}")
     note.locate(session['type'], session['id'])
     #
     note.title = data['title']
