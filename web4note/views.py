@@ -101,11 +101,14 @@ def sendPage():
 @app.route('/_delete', methods=["POST"])
 def delete():
     note = Note(NOTEROOT)
-    note.locate(session['type'], session['id'])
-    fname = note.content_name
+    '''这里似乎可以加一个从当前页面爬取id然后和session['id']比较的过程，防止页面多开误删除的问题！！！
+    或者干脆只是根据爬取的id进行删除，其他archive, update同此！！！'''
+    note.locate(session['type'], session['id']) #其实locate和type没有什么大的关系吧？？？
+    #fname = note.content_name
     note.delete()
-    page = render_template("update.html" ,title = '删除后 - 网页笔记本' ,info = f"已删除笔记: {fname} ") # update.html与index.html共享使用table.html
-    return page
+    return "删除完毕"
+    # page = render_template("update.html" ,title = '删除后 - 网页笔记本' ,info = f"已删除笔记: {fname} ") # update.html与index.html共享使用table.html
+    # return page
 
 @app.route('/_archive', methods=["POST"])
 def archive():
