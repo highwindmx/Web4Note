@@ -101,14 +101,18 @@ def sendPage():
 
 @app.route('/_delete', methods=["POST"])
 def delete():
-    note = Note(NOTEROOT)
-    '''这里似乎可以加一个从当前页面爬取id然后和session['id']比较的过程，防止页面多开误删除的问题！！！
-    或者干脆只是根据爬取的id进行删除，其他archive, update同此！！！'''
-    print(f"正在删除操作{session['id']}")
-    note.locate(session['type'], session['id']) #其实locate和type没有什么大的关系吧？？？
-    #fname = note.content_name
-    note.delete()
-    print("删掉啦")
+    data = request.get_json()
+    if data['idx'] == session['id']:
+        note = Note(NOTEROOT)
+        '''这里似乎可以加一个从当前页面爬取id然后和session['id']比较的过程，防止页面多开误删除的问题！！！
+        或者干脆只是根据爬取的id进行删除，其他archive, update同此！！！'''
+        print(f"正在删除操作{session['id']}")
+        note.locate(session['type'], session['id']) #其实locate和type没有什么大的关系吧？？？
+        #fname = note.content_name
+        note.delete()
+        #print("删掉啦")
+    else:
+        print(f"id不同：{data['idx']} <> {session['id']}")
     return "删除完毕"
     # page = render_template("update.html" ,title = '删除后 - 网页笔记本' ,info = f"已删除笔记: {fname} ") # update.html与index.html共享使用table.html
     # return page
@@ -117,27 +121,33 @@ def delete():
 def archive():
     data = request.get_json() # print("保存内容",data)
     #
-    note = Note(NOTEROOT)
-    print(f"正在存档操作{session['id']}")
-    note.locate(session['type'], session['id'])
-    #
-    note.title = data['title']
-    note.keywords = data['keywords']
-    note.content = data['content']
-    note.update("Archive")
+    if data['idx'] == session['id']:
+        note = Note(NOTEROOT)
+        print(f"正在存档操作{session['id']}")
+        note.locate(session['type'], session['id'])
+        #
+        note.title = data['title']
+        note.keywords = data['keywords']
+        note.content = data['content']
+        note.update("Archive")
+    else:
+        print(f"id不同：{data['idx']} <> {session['id']}")
     return "存档完毕"
 
 @app.route('/_save', methods=["POST"])
 def save():
     data = request.get_json() # 接收js传递来的数据
-    note = Note(NOTEROOT)
-    print(f"正在保存操作{session['id']}")
-    note.locate(session['type'], session['id'])
-    #
-    note.title = data['title']
-    note.keywords = data['keywords']
-    note.content = data['content']
-    note.update("Save")
+    if data['idx'] == session['id']:
+        note = Note(NOTEROOT)
+        print(f"正在保存操作{session['id']}")
+        note.locate(session['type'], session['id'])
+        #
+        note.title = data['title']
+        note.keywords = data['keywords']
+        note.content = data['content']
+        note.update("Save")
+    else:
+        print(f"id不同：{data['idx']} <> {session['id']}")
     return "保存完毕"   
 
 @app.route('/_update', methods=["POST"])

@@ -44,6 +44,7 @@
                 <a class="nav-item nav-link" id="nav-wordcloud-tab" data-toggle="tab" href="#nav-wordcloud" role="tab" aria-controls="nav-wordcloud" aria-selected="false"><i class="fa fa-cloud"></i>统计词云</a>
                 <a class="nav-item nav-link" id="nav-search-tab" data-toggle="tab" href="#nav-search" role="tab" aria-controls="nav-search" aria-selected="false"><i class="fa fa-search"></i>重复检索</a>
                 <a class="nav-item nav-link" id="nav-calendar-tab" data-toggle="tab" href="#nav-calendar" role="tab" aria-controls="nav-calendar" aria-selected="false"><i class="fa fa-calendar-check-o"></i>日历</a>
+                <a class="nav-item nav-link" id="nav-check-tab" data-toggle="tab" href="#nav-check" role="tab" aria-controls="nav-check" aria-selected="false"><i class="fa  fa-check-square-o"></i>检查</a>
             </div>
         </nav>
         <div class="tab-content" id="nav-tabContent">
@@ -85,7 +86,7 @@
             </div>
             
             <div class="tab-pane fade" id="nav-search" role="tabpanel" aria-labelledby="nav-search-tab">
-            <!--所谓高级检索，！！！还未完成！！！-->
+            <!--所谓高级检索，目前只是重复检索，！！！还未完成！！！-->
                 <!--div class="search-module">
                     <button id="search-reset-btn"><i class="fa fa-circle-o"></i>重置</button>             
                     <textarea id="search-input" name="Text1" ></textarea>
@@ -108,6 +109,45 @@
                 <button class="btn btn-secondary" id="calendar" onclick="showCalender()">日历</button>
                 哥们儿你太帅了！
             </div>
+            <div class="tab-pane fade" id="nav-check" role="tabpanel" aria-labelledby="nav-check-tab">
+            <!--核对功能-->
+                <div class="checkbox" style="margin-top: 10px;">
+                    <input id="time-check" style="width:80%;margin:15px">
+                    <button id="tc-btn" class="btn">时间查看</button>
+                    <div id="time-result" style="width:80%;margin:15px"></div>
+                </div>
+                <div>
+                    <textarea id="code-check" style="height:100px;width:80%;margin:15px"></textarea>
+                    <button id="cc-btn" class="btn" style="margin-bottom: 100px">asci码查看</button>
+                    <div id="code-result" style="width:80%;margin:15px"></div>
+                </div>
+            </div>
         </div>
     </body>
+
+    <script>
+        // 时间转换的函数
+        function calTime(t) {
+            var msesInt = Number.parseInt(t);
+            var dt = new Date(msesInt);
+            return dt.toLocaleString();
+        };
+        $('#tc-btn').click(function() {
+            var time_in = document.getElementById("time-check").value;
+            var time_out = document.getElementById("time-result");
+            time_out.innerHTML= calTime(time_in);
+        });
+
+        // ascii码转换的函数
+        function calCode(c) {
+            var ustr = c;
+            return eval("'" + ustr + "'");
+        };
+        $('#cc-btn').click(function() {
+            var code_in = document.getElementById("code-check").value;
+            var code_out = document.getElementById("code-result");
+            code_out.innerHTML= calCode(code_in);
+        });
+        
+    </script>
 </html>

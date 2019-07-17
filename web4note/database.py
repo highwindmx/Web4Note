@@ -139,6 +139,7 @@ class Note():
     # info ##########################     
     def createInfo(self):
         self.readAtt()
+        self.keywords = "；".join(re.split("[;；|,，]", self.keywords)) # 规整关键词分隔符
         self.info = pd.Series([self.type, self.title, self.path, self.ctime, self.mtime, self.atime\
                               ,self.url, self.att_list, self.att_num, self.keywords]
                               ,index=self.index_cols)

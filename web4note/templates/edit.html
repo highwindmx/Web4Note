@@ -20,8 +20,8 @@
         <!--放在一起方便css中使用grid 从而可以把iframe纵向展开-->
             <nav class="navbar navbar-expand-lg fixed-top navbar-dark bg-dark">
             <!--顶部导航栏-->
-                <a class="navbar-brand" href="#">
-                    我的笔记<span class="badge badge-light m-1">{{ noteinfo['id'] }}</span>
+                <a class="navbar-brand">
+                    <i class="fa fa-book"></i><span class="badge badge-light m-1" id="note-id">{{ noteinfo['id'] }}</span>
                 </a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
